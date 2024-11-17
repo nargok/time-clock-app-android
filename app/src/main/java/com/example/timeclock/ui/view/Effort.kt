@@ -1,5 +1,6 @@
 package com.example.timeclock.ui.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,10 +30,9 @@ import androidx.compose.ui.unit.dp
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.material3.TimePicker
-import androidx.compose.material3.TimePickerDialog
-
+import androidx.compose.material3.TimePickerState
+import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,11 +65,6 @@ fun EffortRegisterScreen() {
         LocalTime.of(endTimePickerState.hour, endTimePickerState.minute)
             .format(DateTimeFormatter.ofPattern("HH:mm"))
     }
-
-
-    var date by remember { mutableStateOf("") }
-    var startTime by remember { mutableStateOf("") }
-    var endTime by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -128,7 +123,19 @@ fun EffortRegisterScreen() {
             }
         )
 
+        if (showStartTimePicker) {
+            TimePickerDialog(
+                onDismissRequest = { showStartTimePicker = false },
+            ) {
+                DialExample(
+                    state = startTimePickerState,
+                    onConfirm = { showStartTimePicker = false },
+                    onDismiss = { showStartTimePicker = false }
+                )
+            }
+        }
 
+        // 終了時間
         OutlinedTextField(
             value = formattedEndTime,
             onValueChange = {},
@@ -144,19 +151,61 @@ fun EffortRegisterScreen() {
             }
         )
 
+        if (showEndTimePicker) {
+            TimePickerDialog(
+                onDismissRequest = { showEndTimePicker = false },
+            ) {
+                DialExample(
+                    state = endTimePickerState,
+                    onConfirm = { showEndTimePicker = false },
+                    onDismiss = { showEndTimePicker = false }
+                )
+            }
+        }
 
         Button(onClick = {
             println(
                 """
-                日付: $date
-                開始: $startTime
-                終了: $endTime
+                日付: $formattedDate
+                開始: $formattedStartTime
+                終了: $formattedEndTime
             """.trimIndent()
             )
         }) {
             Text("保存")
         }
     }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TimePickerDialog(
+    onDismissRequest: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismissRequest,
+        content = content,
+        modifier = Modifier.background(Color.White).padding(16.dp),
+    )
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DialExample(
+    state: TimePickerState,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    Column {
+        TimePicker(
+            state = state,
+        )
+        Button(onClick = onDismiss) {
+            Text("Ok")
+        }
+        Button(onClick = onConfirm) {
+            Text("Cancel")
+        }
+    }
 }
