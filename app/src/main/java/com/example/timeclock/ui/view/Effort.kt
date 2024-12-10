@@ -1,6 +1,5 @@
 package com.example.timeclock.ui.view
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +33,6 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerState
-import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -126,15 +124,11 @@ fun EffortRegisterScreen() {
         )
 
         if (showStartTimePicker) {
-            TimePickerDialog(
-                onDismissRequest = { showStartTimePicker = false },
-            ) {
-                DialExample(
-                    state = startTimePickerState,
-                    onConfirm = { showStartTimePicker = false },
-                    onDismiss = { showStartTimePicker = false }
-                )
-            }
+            EffortTimeDialog(
+                state = startTimePickerState,
+                onConfirm = { showStartTimePicker = false },
+                onDismiss = { showStartTimePicker = false }
+            )
         }
 
         // 終了時間
@@ -154,15 +148,11 @@ fun EffortRegisterScreen() {
         )
 
         if (showEndTimePicker) {
-            TimePickerDialog(
-                onDismissRequest = { showEndTimePicker = false },
-            ) {
-                DialExample(
-                    state = endTimePickerState,
-                    onConfirm = { showEndTimePicker = false },
-                    onDismiss = { showEndTimePicker = false }
-                )
-            }
+            EffortTimeDialog(
+                state = endTimePickerState,
+                onConfirm = { showEndTimePicker = false },
+                onDismiss = { showEndTimePicker = false }
+            )
         }
 
         Button(onClick = {
@@ -179,31 +169,16 @@ fun EffortRegisterScreen() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TimePickerDialog(
-    onDismissRequest: () -> Unit,
-    content: @Composable () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        content = content,
-        modifier = Modifier
-            .background(Color.White)
-            .padding(16.dp),
-    )
-}
-
 @Composable
 fun TimePickerDialog(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
-    content: () -> @Composable () -> Unit
+    content: @Composable () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         dismissButton = {
-            TextButton(onClick = {}) {
+            TextButton(onClick = onDismiss) {
                 Text("Dismiss")
             }
         },
@@ -218,27 +193,7 @@ fun TimePickerDialog(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DialExample(
-    state: TimePickerState,
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
-) {
-    Column {
-        TimePicker(
-            state = state,
-        )
-        Button(onClick = onDismiss) {
-            Text("Ok")
-        }
-        Button(onClick = onConfirm) {
-            Text("Cancel")
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DialWithDialog(
+fun EffortTimeDialog(
     state: TimePickerState,
     onConfirm: (TimePickerState) -> Unit,
     onDismiss: () -> Unit,
