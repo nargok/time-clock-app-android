@@ -33,20 +33,13 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.timeclock.viewmodel.EffortViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EffortRegisterScreen() {
-    var showDatePicker by remember {
-        mutableStateOf(false)
-    }
+fun EffortRegisterScreen(viewModel: EffortViewModel = viewModel()) {
     val datePickerState = rememberDatePickerState()
-    val formattedDate = remember(datePickerState.selectedDateMillis) {
-        datePickerState.selectedDateMillis?.let {
-            val selectedDate = LocalDate.ofEpochDay(datePickerState.selectedDateMillis!! / 86400000)
-            selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        } ?: ""
-    }
 
     var showStartTimePicker by remember {
         mutableStateOf(false)
@@ -66,6 +59,8 @@ fun EffortRegisterScreen() {
             .format(DateTimeFormatter.ofPattern("HH:mm"))
     }
 
+    val uiState = viewModel.uiState
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -75,30 +70,35 @@ fun EffortRegisterScreen() {
     ) {
         // 日付
         OutlinedTextField(
-            value = formattedDate,
+            value = uiState.selectedDate?.format(DateTimeFormatter.ISO_DATE) ?: "",
             onValueChange = {},
             label = { Text("日付") },
             modifier = Modifier.fillMaxWidth(),
             readOnly = true,
             trailingIcon = {
                 IconButton(onClick = {
-                    showDatePicker = true
+                    viewModel.toggleDatePicker(true)
                 }) {
                     Icon(Icons.Filled.CalendarToday, contentDescription = "日付選択")
                 }
             }
         )
 
-        if (showDatePicker) {
+        if (uiState.showDatePicker) {
             DatePickerDialog(
-                onDismissRequest = { showDatePicker = false },
+                onDismissRequest = { viewModel.toggleDatePicker(false) },
                 confirmButton = {
-                    Button(onClick = { showDatePicker = false }) {
+                    Button(onClick = {
+                        datePickerState.selectedDateMillis?.let {
+                            viewModel.updateDate(LocalDate.ofEpochDay(it / 86400000))
+                        }
+                        viewModel.toggleDatePicker(false)
+                    }) {
                         Text("Ok")
                     }
                 },
                 dismissButton = {
-                    Button(onClick = { showDatePicker = false }) {
+                    Button(onClick = { viewModel.toggleDatePicker(false) }) {
                         Text("Cancel")
                     }
                 }
@@ -158,7 +158,7 @@ fun EffortRegisterScreen() {
         Button(onClick = {
             println(
                 """
-                日付: $formattedDate
+                日付: ${uiState.selectedDate}
                 開始: $formattedStartTime
                 終了: $formattedEndTime
             """.trimIndent()
