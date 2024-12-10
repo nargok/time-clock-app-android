@@ -15,9 +15,9 @@ import java.time.LocalTime
 import javax.inject.Inject
 
 data class EffortUiState(
-    val selectedDate: LocalDate? = null,
-    val startTime: LocalTime = LocalTime.now(),
-    val endTime: LocalTime = LocalTime.now(),
+    val selectedDate: LocalDate? = LocalDate.now(),
+    val startTime: LocalTime = LocalTime.parse("09:00"), // TODO customize default start time
+    val endTime: LocalTime = LocalTime.parse("18:00"), // TODO customize default end time
     val showDatePicker: Boolean = false,
     val showStartTimePicker: Boolean = false,
     val showEndTimePicker: Boolean = false,

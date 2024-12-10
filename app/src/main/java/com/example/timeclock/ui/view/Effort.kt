@@ -41,15 +41,6 @@ import com.example.timeclock.viewmodel.EffortViewModel
 fun EffortRegisterScreen(viewModel: EffortViewModel = viewModel()) {
     val datePickerState = rememberDatePickerState()
 
-    var showStartTimePicker by remember {
-        mutableStateOf(false)
-    }
-    val startTimePickerState = rememberTimePickerState()
-    val formattedStartTime = remember(startTimePickerState.hour, startTimePickerState.minute) {
-        LocalTime.of(startTimePickerState.hour, startTimePickerState.minute)
-            .format(DateTimeFormatter.ofPattern("HH:mm"))
-    }
-
     var showEndTimePicker by remember {
         mutableStateOf(false)
     }
@@ -109,25 +100,31 @@ fun EffortRegisterScreen(viewModel: EffortViewModel = viewModel()) {
 
         // 開始時間
         OutlinedTextField(
-            value = formattedStartTime,
+            value = uiState.startTime.format(DateTimeFormatter.ofPattern("HH:mm")),
             onValueChange = {},
             label = { Text("開始") },
             modifier = Modifier.fillMaxWidth(),
             readOnly = true,
             trailingIcon = {
                 IconButton(onClick = {
-                    showStartTimePicker = true
+                    viewModel.toggleStartTimePicker(true)
                 }) {
                     Icon(Icons.Filled.Schedule, contentDescription = "開始時間選択")
                 }
             }
         )
 
-        if (showStartTimePicker) {
+        if (uiState.showStartTimePicker) {
             EffortTimeDialog(
-                state = startTimePickerState,
-                onConfirm = { showStartTimePicker = false },
-                onDismiss = { showStartTimePicker = false }
+                state = rememberTimePickerState(
+                    initialHour = uiState.startTime.hour,
+                    initialMinute = uiState.startTime.minute
+                ),
+                onConfirm = {
+                    viewModel.updateStartTime(LocalTime.of(it.hour, it.minute))
+                    viewModel.toggleStartTimePicker(false)
+                },
+                onDismiss = { viewModel.toggleStartTimePicker(false) }
             )
         }
 
@@ -159,7 +156,7 @@ fun EffortRegisterScreen(viewModel: EffortViewModel = viewModel()) {
             println(
                 """
                 日付: ${uiState.selectedDate}
-                開始: $formattedStartTime
+                開始: ${uiState.startTime}
                 終了: $formattedEndTime
             """.trimIndent()
             )
