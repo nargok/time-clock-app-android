@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -17,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -183,10 +185,34 @@ fun TimePickerDialog(
     onDismissRequest: () -> Unit,
     content: @Composable () -> Unit,
 ) {
-    androidx.compose.material3.AlertDialog(
+    AlertDialog(
         onDismissRequest = onDismissRequest,
         content = content,
-        modifier = Modifier.background(Color.White).padding(16.dp),
+        modifier = Modifier
+            .background(Color.White)
+            .padding(16.dp),
+    )
+}
+
+@Composable
+fun TimePickerDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+    content: () -> @Composable () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        dismissButton = {
+            TextButton(onClick = {}) {
+                Text("Dismiss")
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text("Confirm")
+            }
+        },
+        text = { content() }
     )
 }
 
@@ -207,5 +233,22 @@ fun DialExample(
         Button(onClick = onConfirm) {
             Text("Cancel")
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DialWithDialog(
+    state: TimePickerState,
+    onConfirm: (TimePickerState) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    TimePickerDialog(
+        onDismiss = { onDismiss() },
+        onConfirm = { onConfirm(state) },
+    ) {
+        TimePicker(
+            state = state,
+        )
     }
 }
