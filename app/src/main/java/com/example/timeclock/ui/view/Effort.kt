@@ -154,6 +154,8 @@ fun EffortRegisterScreen(viewModel: EffortViewModel = viewModel()) {
                 終了: ${uiState.endTime}
             """.trimIndent()
             )
+            viewModel.save()
+            // TODO saveに成功・失敗したらMessageを表示
         }) {
             Text("保存")
         }

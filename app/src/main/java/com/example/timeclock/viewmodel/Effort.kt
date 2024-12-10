@@ -15,7 +15,7 @@ import java.time.LocalTime
 import javax.inject.Inject
 
 data class EffortUiState(
-    val selectedDate: LocalDate? = LocalDate.now(),
+    val selectedDate: LocalDate = LocalDate.now(),
     val startTime: LocalTime = LocalTime.parse("09:00"), // TODO customize default start time
     val endTime: LocalTime = LocalTime.parse("18:00"), // TODO customize default end time
     val showDatePicker: Boolean = false,
@@ -55,9 +55,14 @@ class EffortViewModel @Inject constructor(
         uiState = uiState.copy(showEndTimePicker = show)
     }
 
-    fun register(date: LocalDate, startTime: LocalTime, endTime: LocalTime) {
+    fun save() {
         viewModelScope.launch(Dispatchers.IO) {
-            val model = EffortModel.create(date, startTime, endTime)
+            val model = EffortModel.create(
+                date = uiState.selectedDate,
+                startTime = uiState.startTime,
+                endTime = uiState.endTime,
+            )
+            // TODO handle register or update
             repository.register(model)
         }
     }
