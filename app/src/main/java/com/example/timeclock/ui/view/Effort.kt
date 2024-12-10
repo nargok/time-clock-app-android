@@ -21,10 +21,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -40,16 +36,6 @@ import com.example.timeclock.viewmodel.EffortViewModel
 @Composable
 fun EffortRegisterScreen(viewModel: EffortViewModel = viewModel()) {
     val datePickerState = rememberDatePickerState()
-
-    var showEndTimePicker by remember {
-        mutableStateOf(false)
-    }
-    val endTimePickerState = rememberTimePickerState()
-    val formattedEndTime = remember(endTimePickerState.hour, endTimePickerState.minute) {
-        LocalTime.of(endTimePickerState.hour, endTimePickerState.minute)
-            .format(DateTimeFormatter.ofPattern("HH:mm"))
-    }
-
     val uiState = viewModel.uiState
 
     Column(
@@ -118,7 +104,8 @@ fun EffortRegisterScreen(viewModel: EffortViewModel = viewModel()) {
             EffortTimeDialog(
                 state = rememberTimePickerState(
                     initialHour = uiState.startTime.hour,
-                    initialMinute = uiState.startTime.minute
+                    initialMinute = uiState.startTime.minute,
+                    is24Hour = true,
                 ),
                 onConfirm = {
                     viewModel.updateStartTime(LocalTime.of(it.hour, it.minute))
@@ -130,25 +117,32 @@ fun EffortRegisterScreen(viewModel: EffortViewModel = viewModel()) {
 
         // 終了時間
         OutlinedTextField(
-            value = formattedEndTime,
+            value = uiState.endTime.format(DateTimeFormatter.ofPattern("HH:mm")),
             onValueChange = {},
             label = { Text("終了") },
             modifier = Modifier.fillMaxWidth(),
             readOnly = true,
             trailingIcon = {
                 IconButton(onClick = {
-                    showEndTimePicker = true
+                    viewModel.toggleEndTimePicker(true)
                 }) {
                     Icon(Icons.Filled.Schedule, contentDescription = "終了時間選択")
                 }
             }
         )
 
-        if (showEndTimePicker) {
+        if (uiState.showEndTimePicker) {
             EffortTimeDialog(
-                state = endTimePickerState,
-                onConfirm = { showEndTimePicker = false },
-                onDismiss = { showEndTimePicker = false }
+                state = rememberTimePickerState(
+                    initialHour = uiState.endTime.hour,
+                    initialMinute = uiState.endTime.minute,
+                    is24Hour = true,
+                ),
+                onConfirm = {
+                    viewModel.updateEndTime(LocalTime.of(it.hour, it.minute))
+                    viewModel.toggleEndTimePicker(false)
+                },
+                onDismiss = { viewModel.toggleEndTimePicker(false) }
             )
         }
 
@@ -157,7 +151,7 @@ fun EffortRegisterScreen(viewModel: EffortViewModel = viewModel()) {
                 """
                 日付: ${uiState.selectedDate}
                 開始: ${uiState.startTime}
-                終了: $formattedEndTime
+                終了: ${uiState.endTime}
             """.trimIndent()
             )
         }) {
