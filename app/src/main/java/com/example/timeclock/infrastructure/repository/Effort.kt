@@ -25,7 +25,24 @@ class EffortRepositoryImpl @Inject constructor(
         return effortDao.getEfforts(start, end).map { it.toModel() }
     }
 
-    override suspend fun register(model: EffortModel) {
+    override suspend fun save(model: EffortModel) {
+        val existingEffort = effortDao.getEffort(model.date.toString())
+
+        if (existingEffort != null) {
+            val entity = existingEffort.copy(
+                startTime = model.startTime.toString(),
+                endTime = model.endTime.toString(),
+                leave = model.leave,
+            )
+            effortDao.updateEffort(
+                id = entity.id,
+                startTime = entity.startTime,
+                endTime = entity.endTime,
+                leave = entity.leave,
+            )
+            return
+        }
+
         effortDao.insertEffort(model.toEntity())
     }
 }

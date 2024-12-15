@@ -9,5 +9,5 @@ import com.example.timeclock.domain.model.EffortSearchCondition
 interface EffortRepository {
     fun search(condition: EffortSearchCondition): List<EffortModel>
 
-    suspend fun register(model: EffortModel)
+    suspend fun save(model: EffortModel)
 }

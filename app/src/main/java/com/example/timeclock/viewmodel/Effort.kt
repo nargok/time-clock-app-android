@@ -67,7 +67,8 @@ class EffortViewModel @Inject constructor(
                 endTime = uiState.endTime,
             )
             // TODO handle register or update
-            repository.register(model)
+            repository.save(model)
+            // TODO handle success or failure
             _saveSuccess.value = true
         }
     }
