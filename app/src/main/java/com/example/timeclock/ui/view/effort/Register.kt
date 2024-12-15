@@ -1,4 +1,4 @@
-package com.example.timeclock.ui.view
+package com.example.timeclock.ui.view.effort
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -37,12 +38,16 @@ import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.timeclock.viewmodel.EffortViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EffortRegisterScreen(viewModel: EffortViewModel = viewModel()) {
+fun EffortRegisterScreen(
+    navController: NavController,
+    viewModel: EffortViewModel = hiltViewModel(),
+) {
     val datePickerState = rememberDatePickerState()
     val uiState = viewModel.uiState
     val snackBarHostState = remember { SnackbarHostState() }
@@ -185,7 +190,11 @@ fun EffortRegisterScreen(viewModel: EffortViewModel = viewModel()) {
 
         LaunchedEffect(saveSuccess) {
             if (saveSuccess) {
-                snackBarHostState.showSnackbar("保存しました")
+                snackBarHostState.showSnackbar(
+                    message = "保存しました",
+                    duration = SnackbarDuration.Short // TODO もうちょっと短くしたい
+                )
+                navController.navigate("effortList")
             }
         }
 
