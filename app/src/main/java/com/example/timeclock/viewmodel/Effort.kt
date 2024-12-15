@@ -1,5 +1,6 @@
 package com.example.timeclock.viewmodel
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,6 +31,9 @@ class EffortViewModel @Inject constructor(
 
     var uiState by mutableStateOf(EffortUiState())
         private set
+
+    private val _saveSuccess = mutableStateOf(false)
+    val saveSuccess: State<Boolean> = _saveSuccess
 
     fun updateDate(date: LocalDate) {
         uiState = uiState.copy(selectedDate = date)
@@ -64,6 +68,7 @@ class EffortViewModel @Inject constructor(
             )
             // TODO handle register or update
             repository.register(model)
+            _saveSuccess.value = true
         }
     }
 }
