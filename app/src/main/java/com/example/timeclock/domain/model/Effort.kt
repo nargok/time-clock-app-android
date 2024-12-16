@@ -65,3 +65,5 @@ data class EffortModel private constructor(
 data class EffortSearchCondition(
     val yearMonth: YearMonth,
 )
+
+// TODO MonthlyEffortsModelが必要そう

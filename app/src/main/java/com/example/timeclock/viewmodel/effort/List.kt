@@ -32,10 +32,12 @@ class EffortListViewModel @Inject constructor(
 
     fun setPreviousYearMonth() {
         uiState = uiState.copy(selectedYearMonth = uiState.selectedYearMonth.minusMonths(1))
+        fetchMonthlyEfforts()
     }
 
     fun setNextYearMonth() {
         uiState = uiState.copy(selectedYearMonth = uiState.selectedYearMonth.plusMonths(1))
+        fetchMonthlyEfforts()
     }
 
     fun fetchMonthlyEfforts() {
