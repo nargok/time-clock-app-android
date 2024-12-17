@@ -1,4 +1,4 @@
-package com.example.timeclock.viewmodel
+package com.example.timeclock.viewmodel.effort
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.timeclock.domain.model.EffortModel
+import com.example.timeclock.domain.model.vo.EffortId
 import com.example.timeclock.domain.repository.EffortRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,21 +16,22 @@ import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
 
-data class EffortUiState(
-    val selectedDate: LocalDate = LocalDate.now(), // TODO まだ未登録の日付を初期値とする
-    val startTime: LocalTime = LocalTime.parse("09:00"), // TODO customize default start time
-    val endTime: LocalTime = LocalTime.parse("18:00"), // TODO customize default end time
+data class EffortEditUiState(
+    val id: EffortId? = null,
+    val selectedDate: LocalDate? = null,
+    val startTime: LocalTime? = null,
+    val endTime: LocalTime? = null,
     val showDatePicker: Boolean = false,
     val showStartTimePicker: Boolean = false,
     val showEndTimePicker: Boolean = false,
 )
 
 @HiltViewModel
-class EffortViewModel @Inject constructor(
+class EffortEditViewModel @Inject constructor(
     private val repository: EffortRepository
 ) : ViewModel() {
 
-    var uiState by mutableStateOf(EffortUiState())
+    var uiState by mutableStateOf(EffortEditUiState())
         private set
 
     private val _saveSuccess = mutableStateOf(false)
@@ -59,15 +61,32 @@ class EffortViewModel @Inject constructor(
         uiState = uiState.copy(showEndTimePicker = show)
     }
 
-    fun save() {
+    fun fetchEffort(id: EffortId) {
         viewModelScope.launch(Dispatchers.IO) {
-            // TODO handle create or update
-            val model = EffortModel.create(
-                date = uiState.selectedDate,
-                startTime = uiState.startTime,
-                endTime = uiState.endTime,
+            val model = repository.find(id)
+            checkNotNull(model)
+
+            uiState = EffortEditUiState(
+                id = model.id,
+                selectedDate = model.date,
+                startTime = model.startTime,
+                endTime = model.endTime,
             )
-            // TODO ここで登録ができなくなった。
+        }
+    }
+
+    fun save(id: EffortId) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val exitingEffort = repository.find(id)
+            checkNotNull(exitingEffort)
+
+            val model = EffortModel.reconstruct(
+                id = id,
+                date = exitingEffort.date,
+                startTime = requireNotNull(uiState.startTime),
+                endTime = requireNotNull(uiState.endTime),
+                leave = false, // TODO set it from uiState
+            )
             // TODO handle register or update
             repository.save(model)
             // TODO handle success or failure

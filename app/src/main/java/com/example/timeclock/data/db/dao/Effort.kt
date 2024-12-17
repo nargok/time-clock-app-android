@@ -10,8 +10,11 @@ interface EffortDao {
     @Query("SELECT * FROM effort WHERE date >= :fromDate AND date <= :toDate ORDER BY id DESC")
     fun getEfforts(fromDate: String, toDate: String): List<EffortEntity>
 
+    @Query("SELECT * FROM effort WHERE id = :id")
+    fun findEffortById(id: String): EffortEntity?
+
     @Query("SELECT * FROM effort WHERE date = :date")
-    fun getEffort(date: String): EffortEntity?
+    fun findEffortByDate(date: String): EffortEntity?
 
     @Insert
     suspend fun insertEffort(effort: EffortEntity)

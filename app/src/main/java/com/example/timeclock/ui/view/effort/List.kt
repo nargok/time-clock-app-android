@@ -39,7 +39,6 @@ fun EffortListScreen(
     val uiState = viewModel.uiState
     val efforts by viewModel.efforts
 
-    // TODO YearMonthが変更されたら再取得する
     LaunchedEffect(Unit) {
         viewModel.fetchMonthlyEfforts()
     }
@@ -91,8 +90,11 @@ fun EffortListItem(effort: EffortModel) {
             .fillMaxSize()
             .padding(8.dp),
     ) {
-        Text(text = "日時: ${effort.date}")
-        Text(text = "開始時刻: ${effort.startTime}")
-        Text(text = "終了時刻: ${effort.endTime}")
+        // TODO　Row TapしたらEdit画面に遷移する
+        Column {
+            Text(text = "日時: ${effort.date}")
+            Text(text = "開始時刻: ${effort.startTime}")
+            Text(text = "終了時刻: ${effort.endTime}")
+        }
     }
 }
