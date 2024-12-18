@@ -37,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.timeclock.domain.model.vo.EffortId
+import com.example.timeclock.ui.view.effort.components.EffortTimeDialog
 import com.example.timeclock.viewmodel.effort.EffortEditViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
