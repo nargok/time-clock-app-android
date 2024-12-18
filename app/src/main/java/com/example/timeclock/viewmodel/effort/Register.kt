@@ -1,4 +1,4 @@
-package com.example.timeclock.viewmodel
+package com.example.timeclock.viewmodel.effort
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -25,7 +25,7 @@ data class EffortUiState(
 )
 
 @HiltViewModel
-class EffortViewModel @Inject constructor(
+class EffortRegisterViewModel @Inject constructor(
     private val repository: EffortRepository
 ) : ViewModel() {
 

@@ -37,13 +37,13 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.timeclock.ui.view.effort.components.EffortTimeDialog
-import com.example.timeclock.viewmodel.EffortViewModel
+import com.example.timeclock.viewmodel.effort.EffortRegisterViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EffortRegisterScreen(
     navController: NavController,
-    viewModel: EffortViewModel = hiltViewModel(),
+    viewModel: EffortRegisterViewModel = hiltViewModel(),
 ) {
     val datePickerState = rememberDatePickerState()
     val uiState = viewModel.uiState
