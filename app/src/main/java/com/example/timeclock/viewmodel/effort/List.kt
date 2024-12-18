@@ -17,6 +17,7 @@ import javax.inject.Inject
 
 data class EffortListUiState(
     val selectedYearMonth: YearMonth = YearMonth.now(),
+    val displayEffortSummary: Boolean = false,
 )
 
 @HiltViewModel
@@ -38,6 +39,10 @@ class EffortListViewModel @Inject constructor(
     fun setNextYearMonth() {
         uiState = uiState.copy(selectedYearMonth = uiState.selectedYearMonth.plusMonths(1))
         fetchMonthlyEfforts()
+    }
+
+    fun toggleDisplayEffortSummary(show: Boolean) {
+        uiState = uiState.copy(displayEffortSummary = show)
     }
 
     fun fetchMonthlyEfforts() {

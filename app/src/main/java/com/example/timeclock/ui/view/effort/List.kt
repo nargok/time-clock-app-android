@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.timeclock.domain.model.EffortModel
@@ -70,18 +71,58 @@ fun EffortListScreen(
         }
     ) { paddingValues ->
         // TODO ここにStatesを出したい。総作業時間、基準時間、平均作業時間
-        LazyColumn(
-            contentPadding = paddingValues,
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(paddingValues)
         ) {
-            items(efforts) { effort ->
-                EffortListItem(effort) {
-                    navController.navigate("effortEdit/${effort.id.value}")
+            Column {
+                // FIXME 最初から全項目表示してもよいかも
+                if (uiState.displayEffortSummary) {
+                    Text(
+                        "基準時間: 160時間", // TODO 設定した基準時間を表示する
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
+                        fontSize = 24.sp
+                    )
+                    Text(
+                        "合計時間: 100時間", // TODO 計算した合計時間を表示する
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
+                        fontSize = 24.sp
+                    )
+                    Text(
+                        "残り日数: 5日", // TODO 計算した残り日数を表示する
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
+                        fontSize = 24.sp
+                    )
                 }
-                Divider()
+                Text(
+                    "平均: 8.3", // TODO 計算した平均値を表示する
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
+                    fontSize = 24.sp
+                )
             }
+            LazyColumn(
+                contentPadding = paddingValues,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+            ) {
+                items(efforts) { effort ->
+                    EffortListItem(effort) {
+                        navController.navigate("effortEdit/${effort.id.value}")
+                    }
+                    Divider()
+                }
+            }
+
         }
     }
 }
