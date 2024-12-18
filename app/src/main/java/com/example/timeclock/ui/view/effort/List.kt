@@ -1,5 +1,6 @@
 package com.example.timeclock.ui.view.effort
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -76,7 +77,9 @@ fun EffortListScreen(
                 .padding(16.dp),
         ) {
             items(efforts) { effort ->
-                EffortListItem(effort)
+                EffortListItem(effort) {
+                    navController.navigate("effortEdit/${effort.id.value}")
+                }
                 Divider()
             }
         }
@@ -84,13 +87,13 @@ fun EffortListScreen(
 }
 
 @Composable
-fun EffortListItem(effort: EffortModel) {
+fun EffortListItem(effort: EffortModel, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable { onClick() }
     ) {
-        // TODO　Row TapしたらEdit画面に遷移する
         Column {
             Text(text = "日時: ${effort.date}")
             Text(text = "開始時刻: ${effort.startTime}")

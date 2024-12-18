@@ -11,10 +11,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.timeclock.domain.model.vo.EffortId
 import com.example.timeclock.ui.theme.TimeClockTheme
+import com.example.timeclock.ui.view.effort.EffortEditScreen
 import com.example.timeclock.ui.view.effort.EffortListScreen
 import com.example.timeclock.ui.view.effort.EffortRegisterScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,25 +42,33 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "effortList") {
                         composable("effortList") { EffortListScreen(navController) }
                         composable("effortRegister") { EffortRegisterScreen(navController) }
+                        composable(
+                            "effortEdit/{id}",
+                            arguments = listOf(navArgument("id") { type = NavType.StringType })
+                        ) { backStackEntry ->
+                            val id = backStackEntry.arguments?.getString("id")?.let {
+                                EffortId.reconstruct(it)
+                            } ?: return@composable
+                            EffortEditScreen(id, navController)
+                        } }
                     }
                 }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TimeClockTheme {
-        Greeting("Android")
+    @Composable
+    fun Greeting(name: String, modifier: Modifier = Modifier) {
+        Text(
+            text = "Hello $name!",
+            modifier = modifier
+        )
     }
-}
+
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        TimeClockTheme {
+            Greeting("Android")
+        }
+    }

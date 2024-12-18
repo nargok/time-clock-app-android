@@ -23,7 +23,7 @@ class EffortRepositoryImpl @Inject constructor(
         return effortDao.getEfforts(start, end).map { it.toModel() }
     }
 
-    override fun find(id: EffortId) = effortDao.findEffortById(id.value)?.toModel()
+    override fun find(id: EffortId) = effortDao.findEffortById(id.value)?.let { it.toModel() }
 
     override suspend fun save(model: EffortModel) {
         val existingEffort = effortDao.findEffortByDate(model.date.toString())
