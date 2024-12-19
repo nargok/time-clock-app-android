@@ -1,7 +1,10 @@
 package com.example.timeclock.domain.model
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.timeclock.config.defaultWorkingHours
 import com.example.timeclock.domain.model.vo.EffortId
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.YearMonth
@@ -20,7 +23,7 @@ data class EffortModel private constructor(
     /**
      * 休暇にする
      */
-    fun makeLeave(): EffortModel {
+    fun leave(): EffortModel {
         return EffortModel(
             id = id,
             date = date,
@@ -33,12 +36,22 @@ data class EffortModel private constructor(
     /**
      * 作業時間
      */
+    @RequiresApi(Build.VERSION_CODES.S)
     fun workingTime(): Double {
-        // TODO 作業時間の計算ロジックを修正する
-        return (endTime.hour - startTime.hour).toDouble()
+        val duration = Duration.between(startTime, endTime)
+        return duration.toHours().toDouble() + (duration.toMinutesPart() * 0.01) - FIXED_BREAK_TIME
+    }
+
+    /**
+     * 作業時間のDuration
+     */
+    fun workingTimeDuration(): Duration {
+        return Duration.between(startTime, endTime)
     }
 
     companion object {
+        val FIXED_BREAK_TIME = 1.0
+
         fun create(date: LocalDate, startTime: LocalTime, endTime: LocalTime): EffortModel {
             return EffortModel(
                 id = EffortId.create(),
@@ -84,8 +97,20 @@ data class MonthlyEffortModel(
     /**
      * 作業時間の合計
      */
+    @RequiresApi(Build.VERSION_CODES.S)
     fun totalWorkingHours(): Double {
-        return efforts.sumOf { it.workingTime() }
+        /**
+         * 1. 作業時間の時間部分の合計 -> totalHours
+         * 2. 作業時間の分部分の合計 -> totalMinutes
+         * 3. 作業時間の分部分を時間に変換して整数にする => (totalMinutes / 60).toInt()
+         * 4. 分合計の内60分未満を算出 => MOD(totalMinutes, 60) * 0.01
+         * 5. 全部合計する
+         */
+        val totalHours = efforts.sumOf { it.workingTimeDuration().toHours() }
+        val totalMinutes = efforts.sumOf { it.workingTimeDuration().toMinutesPart() }
+        val totalMinutesToHours = (totalMinutes / 60)
+        val remainingMinutes = (totalMinutes % 60) * 0.01
+        return totalHours + totalMinutesToHours + remainingMinutes - efforts.size * EffortModel.FIXED_BREAK_TIME
     }
 
     /**
@@ -112,14 +137,14 @@ data class MonthlyEffortModel(
     /**
      * 平均作業時間
      */
+    @RequiresApi(Build.VERSION_CODES.S)
     fun averageWorkingHours(): Double {
         if (efforts.isEmpty()) return 0.0
-        return String.format("%.1f", totalWorkingHours().toDouble() / efforts.size).toDouble()
+        return String.format("%.2f", totalWorkingHours() / efforts.size).toDouble()
     }
 
     companion object {
-        // TODO get it from database
-        private val TOTAL_WORKING_HOURS = 160
+        private val TOTAL_WORKING_HOURS = 160 // TODO get it from database
         private val WORKING_HOURS_PER_DAY = 8
     }
 }

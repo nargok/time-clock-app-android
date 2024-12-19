@@ -1,5 +1,7 @@
 package com.example.timeclock.ui.view.effort
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,6 +35,7 @@ import com.example.timeclock.domain.model.EffortModel
 import com.example.timeclock.viewmodel.effort.EffortListViewModel
 import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EffortListScreen(
@@ -103,7 +106,7 @@ fun EffortListScreen(
                     )
                 }
                 Text(
-                    "平均: ${monthlyEffort?.averageWorkingHours()}",
+                    "平均: ${monthlyEffort?.averageWorkingHours()}H",
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
