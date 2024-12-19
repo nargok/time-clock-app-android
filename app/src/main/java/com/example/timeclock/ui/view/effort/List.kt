@@ -40,6 +40,7 @@ fun EffortListScreen(
 ) {
     val uiState = viewModel.uiState
     val efforts by viewModel.efforts
+    val monthlyEffort by viewModel.monthlyEfforts
 
     LaunchedEffect(Unit) {
         viewModel.fetchMonthlyEfforts()
@@ -70,7 +71,6 @@ fun EffortListScreen(
             }
         }
     ) { paddingValues ->
-        // TODO ここにStatesを出したい。総作業時間、基準時間、平均作業時間
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -87,14 +87,14 @@ fun EffortListScreen(
                         fontSize = 24.sp
                     )
                     Text(
-                        "合計時間: 100時間", // TODO 計算した合計時間を表示する
+                        "合計時間: ${monthlyEffort?.totalWorkingHours()}時間", // TODO 計算した合計時間を表示する
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
                         fontSize = 24.sp
                     )
                     Text(
-                        "残り日数: 5日", // TODO 計算した残り日数を表示する
+                        "残り日数: ${monthlyEffort?.remainingDays()}日", // TODO 計算した残り日数を表示する
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
@@ -102,7 +102,7 @@ fun EffortListScreen(
                     )
                 }
                 Text(
-                    "平均: 8.3", // TODO 計算した平均値を表示する
+                    "平均: ${monthlyEffort?.averageWorkingHours()}", // TODO 計算した平均値を表示する
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },

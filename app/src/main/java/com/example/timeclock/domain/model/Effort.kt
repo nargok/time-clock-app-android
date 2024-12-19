@@ -1,5 +1,7 @@
 package com.example.timeclock.domain.model
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.example.timeclock.config.defaultWorkingHours
 import com.example.timeclock.domain.model.vo.EffortId
 import java.time.LocalDate
@@ -66,4 +68,38 @@ data class EffortSearchCondition(
     val yearMonth: YearMonth,
 )
 
-// TODO MonthlyEffortsModelが必要そう
+/**
+ * 月次作業記録
+ */
+data class MonthlyEffortModel(
+    val yearMonth: YearMonth,
+    val efforts: List<EffortModel>,
+) {
+    /**
+     * 作業時間の合計
+     */
+    fun totalWorkingHours(): Int {
+        return efforts.sumOf { it.endTime.hour - it.startTime.hour }
+    }
+
+    /**
+     * 残りの作業日数
+     */
+    fun remainingDays(): Int {
+        val totalDays = TOTAL_WORKING_HOURS / WORKING_HOURS_PER_DAY
+        return totalDays - efforts.size
+    }
+
+    /**
+     * 平均作業時間
+     */
+    fun averageWorkingHours(): Double {
+        return String.format("%.1f", totalWorkingHours().toDouble() / efforts.size).toDouble()
+    }
+
+    companion object {
+        // TODO get it from database
+        private val TOTAL_WORKING_HOURS = 160
+        private val WORKING_HOURS_PER_DAY = 8
+    }
+}

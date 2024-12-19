@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.timeclock.domain.model.EffortModel
 import com.example.timeclock.domain.model.EffortSearchCondition
+import com.example.timeclock.domain.model.MonthlyEffortModel
 import com.example.timeclock.domain.repository.EffortRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,8 @@ class EffortListViewModel @Inject constructor(
 
     private val _efforts = mutableStateOf<List<EffortModel>>(emptyList())
     val efforts: State<List<EffortModel>> = _efforts
+    private val _monthlyEfforts = mutableStateOf<MonthlyEffortModel?>(null)
+    val monthlyEfforts: State<MonthlyEffortModel?> = _monthlyEfforts
 
     fun setPreviousYearMonth() {
         uiState = uiState.copy(selectedYearMonth = uiState.selectedYearMonth.minusMonths(1))
@@ -51,6 +54,7 @@ class EffortListViewModel @Inject constructor(
                 EffortSearchCondition(uiState.selectedYearMonth)
             val efforts = repository.search(condition)
             _efforts.value = efforts
+            _monthlyEfforts.value = MonthlyEffortModel(uiState.selectedYearMonth, efforts)
         }
     }
 }
