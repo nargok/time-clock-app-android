@@ -81,21 +81,21 @@ fun EffortListScreen(
                 // FIXME 最初から全項目表示してもよいかも
                 if (uiState.displayEffortSummary) {
                     Text(
-                        "基準時間: 160時間", // TODO 設定した基準時間を表示する
+                        "基準時間: 160時間(${monthlyEffort?.totalDays()}日)", // TODO 設定した基準時間を表示する
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
                         fontSize = 24.sp
                     )
                     Text(
-                        "合計時間: ${monthlyEffort?.totalWorkingHours()}時間", // TODO 計算した合計時間を表示する
+                        "合計時間: ${monthlyEffort?.totalWorkingHours()}時間(${monthlyEffort?.workedDays()}日)",
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
                         fontSize = 24.sp
                     )
                     Text(
-                        "残り日数: ${monthlyEffort?.remainingDays()}日", // TODO 計算した残り日数を表示する
+                        "残り日数: ${monthlyEffort?.remainingDays()}日",
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
@@ -103,7 +103,7 @@ fun EffortListScreen(
                     )
                 }
                 Text(
-                    "平均: ${monthlyEffort?.averageWorkingHours()}", // TODO 計算した平均値を表示する
+                    "平均: ${monthlyEffort?.averageWorkingHours()}",
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },

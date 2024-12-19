@@ -89,11 +89,24 @@ data class MonthlyEffortModel(
     }
 
     /**
+     * 作業日数
+     */
+    fun totalDays(): Int {
+        return TOTAL_WORKING_HOURS / WORKING_HOURS_PER_DAY
+    }
+
+    /**
+     * 経過日数
+     */
+    fun workedDays(): Int {
+        return efforts.size
+    }
+
+    /**
      * 残りの作業日数
      */
     fun remainingDays(): Int {
-        val totalDays = TOTAL_WORKING_HOURS / WORKING_HOURS_PER_DAY
-        return totalDays - efforts.size
+        return totalDays() - efforts.size
     }
 
     /**
