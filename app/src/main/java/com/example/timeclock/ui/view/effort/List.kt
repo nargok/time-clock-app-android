@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.timeclock.domain.model.EffortModel
 import com.example.timeclock.viewmodel.effort.EffortListViewModel
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -136,9 +137,15 @@ fun EffortListItem(effort: EffortModel, onClick: () -> Unit) {
             .clickable { onClick() }
     ) {
         Column {
-            Text(text = "日時: ${effort.date}")
-            Text(text = "開始時刻: ${effort.startTime}")
-            Text(text = "終了時刻: ${effort.endTime}")
+            Text(
+                text = "${effort.date.format(DateTimeFormatter.ofPattern("MM/dd (E)"))}",
+                fontSize = 20.sp
+            )
+            Row(modifier = Modifier.padding(top = 16.dp)) {
+                Text(text = "${effort.startTime} ~ ")
+                Text(text = "${effort.endTime}")
+                Text(text = "(${effort.workingTime()}H)")
+            }
         }
     }
 }

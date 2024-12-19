@@ -1,7 +1,5 @@
 package com.example.timeclock.domain.model
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.example.timeclock.config.defaultWorkingHours
 import com.example.timeclock.domain.model.vo.EffortId
 import java.time.LocalDate
@@ -30,6 +28,14 @@ data class EffortModel private constructor(
             endTime = startTime.plusHours(defaultWorkingHours),
             leave = true,
         )
+    }
+
+    /**
+     * 作業時間
+     */
+    fun workingTime(): Double {
+        // TODO 作業時間の計算ロジックを修正する
+        return (endTime.hour - startTime.hour).toDouble()
     }
 
     companion object {
@@ -78,8 +84,8 @@ data class MonthlyEffortModel(
     /**
      * 作業時間の合計
      */
-    fun totalWorkingHours(): Int {
-        return efforts.sumOf { it.endTime.hour - it.startTime.hour }
+    fun totalWorkingHours(): Double {
+        return efforts.sumOf { it.workingTime() }
     }
 
     /**
@@ -94,6 +100,7 @@ data class MonthlyEffortModel(
      * 平均作業時間
      */
     fun averageWorkingHours(): Double {
+        if (efforts.isEmpty()) return 0.0
         return String.format("%.1f", totalWorkingHours().toDouble() / efforts.size).toDouble()
     }
 
