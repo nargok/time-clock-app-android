@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "0fbe4877a6e0c44efa539d3115e0fc06",
+    "version": 2,
+    "identityHash": "56f9ecd6b221757d5281458c279f45e3",
     "entities": [
       {
         "tableName": "effort",
@@ -57,14 +57,24 @@
             "id"
           ]
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_effort_date",
+            "unique": false,
+            "columnNames": [
+              "date"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_effort_date` ON `${TABLE_NAME}` (`date`)"
+          }
+        ],
         "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0fbe4877a6e0c44efa539d3115e0fc06')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '56f9ecd6b221757d5281458c279f45e3')"
     ]
   }
 }

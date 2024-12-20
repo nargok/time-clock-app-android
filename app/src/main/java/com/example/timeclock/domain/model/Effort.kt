@@ -3,6 +3,7 @@ package com.example.timeclock.domain.model
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.timeclock.config.defaultWorkingHours
+import com.example.timeclock.domain.model.vo.EffortDescription
 import com.example.timeclock.domain.model.vo.EffortId
 import java.time.Duration
 import java.time.LocalDate
@@ -18,6 +19,7 @@ data class EffortModel private constructor(
     val startTime: LocalTime,
     val endTime: LocalTime,
     val leave: Boolean,
+    val description: EffortDescription? = null,
 ) {
 
     /**
@@ -52,13 +54,14 @@ data class EffortModel private constructor(
     companion object {
         val FIXED_BREAK_TIME = 1.0
 
-        fun create(date: LocalDate, startTime: LocalTime, endTime: LocalTime): EffortModel {
+        fun create(date: LocalDate, startTime: LocalTime, endTime: LocalTime, leave: Boolean, description: EffortDescription?): EffortModel {
             return EffortModel(
                 id = EffortId.create(),
                 date = date,
                 startTime = startTime,
                 endTime = endTime,
                 leave = false,
+                description = description,
             )
         }
 
@@ -67,7 +70,8 @@ data class EffortModel private constructor(
             date: LocalDate,
             startTime: LocalTime,
             endTime: LocalTime,
-            leave: Boolean
+            leave: Boolean,
+            description: EffortDescription?,
         ): EffortModel {
             return EffortModel(
                 id = id,
@@ -75,6 +79,7 @@ data class EffortModel private constructor(
                 startTime = startTime,
                 endTime = endTime,
                 leave = leave,
+                description = description,
             )
         }
     }
