@@ -22,7 +22,8 @@ object AppModule {
             app,
             TimeClockDatabase::class.java,
             TimeClockDatabase.DATABASE_NAME
-        ).build()
+        ).addMigrations(TimeClockDatabase.MIGRATION_1_2)
+            .build()
     }
 
     @Provides

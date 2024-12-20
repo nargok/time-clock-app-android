@@ -176,6 +176,18 @@ fun EffortEditScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // 備考
+            OutlinedTextField(
+                value = uiState.description,
+                onValueChange = { viewModel.updateDescription(it) },
+                label = { Text("備考") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Button(onClick = {
                 println(
                     """

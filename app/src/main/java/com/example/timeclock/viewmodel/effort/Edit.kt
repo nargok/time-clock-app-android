@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.timeclock.domain.model.EffortModel
+import com.example.timeclock.domain.model.vo.EffortDescription
 import com.example.timeclock.domain.model.vo.EffortId
 import com.example.timeclock.domain.repository.EffortRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,7 @@ data class EffortEditUiState(
     val selectedDate: LocalDate? = null,
     val startTime: LocalTime? = null,
     val endTime: LocalTime? = null,
+    val description: String = "",
     val showDatePicker: Boolean = false,
     val showStartTimePicker: Boolean = false,
     val showEndTimePicker: Boolean = false,
@@ -49,6 +51,10 @@ class EffortEditViewModel @Inject constructor(
         uiState = uiState.copy(endTime = time)
     }
 
+    fun updateDescription(description: String) {
+        uiState = uiState.copy(description = description)
+    }
+
     fun toggleDatePicker(show: Boolean) {
         uiState = uiState.copy(showDatePicker = show)
     }
@@ -71,6 +77,7 @@ class EffortEditViewModel @Inject constructor(
                 selectedDate = model.date,
                 startTime = model.startTime,
                 endTime = model.endTime,
+                description = model.description?.value ?: "",
             )
         }
     }
@@ -86,6 +93,7 @@ class EffortEditViewModel @Inject constructor(
                 startTime = requireNotNull(uiState.startTime),
                 endTime = requireNotNull(uiState.endTime),
                 leave = false, // TODO set it from uiState
+                description = EffortDescription(uiState.description),
             )
             // TODO handle register or update
             repository.save(model)

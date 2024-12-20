@@ -4,6 +4,7 @@ import com.example.timeclock.data.db.dao.EffortDao
 import com.example.timeclock.data.db.entity.EffortEntity
 import com.example.timeclock.domain.model.EffortModel
 import com.example.timeclock.domain.model.EffortSearchCondition
+import com.example.timeclock.domain.model.vo.EffortDescription
 import com.example.timeclock.domain.model.vo.EffortId
 import com.example.timeclock.domain.repository.EffortRepository
 import java.time.LocalDate
@@ -38,6 +39,7 @@ class EffortRepositoryImpl @Inject constructor(
             startTime = model.startTime.toString(),
             endTime = model.endTime.toString(),
             leave = model.leave,
+            description = model.description?.value,
         )
     }
 }
@@ -52,6 +54,7 @@ private fun EffortModel.toEntity(): EffortEntity {
         startTime = startTime.toString(),
         endTime = endTime.toString(),
         leave = leave,
+        description = description?.let { it.value },
     )
 }
 
@@ -65,5 +68,6 @@ private fun EffortEntity.toModel(): EffortModel {
         startTime = LocalTime.parse(startTime),
         endTime = LocalTime.parse(endTime),
         leave = leave,
+        description = description?.let { EffortDescription(it) },
     )
 }

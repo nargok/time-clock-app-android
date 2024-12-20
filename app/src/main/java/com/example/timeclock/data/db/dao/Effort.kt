@@ -19,6 +19,12 @@ interface EffortDao {
     @Insert
     suspend fun insertEffort(effort: EffortEntity)
 
-    @Query("UPDATE effort SET start_time = :startTime, end_time = :endTime, leave = :leave WHERE id = :id")
-    suspend fun updateEffort(id: String, startTime: String, endTime: String, leave: Boolean)
+    @Query("UPDATE effort SET start_time = :startTime, end_time = :endTime, leave = :leave, description = :description WHERE id = :id")
+    suspend fun updateEffort(
+        id: String,
+        startTime: String,
+        endTime: String,
+        leave: Boolean,
+        description: String?
+    )
 }
