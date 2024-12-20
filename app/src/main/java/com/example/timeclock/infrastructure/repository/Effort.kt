@@ -39,6 +39,7 @@ class EffortRepositoryImpl @Inject constructor(
             startTime = model.startTime.toString(),
             endTime = model.endTime.toString(),
             leave = model.leave,
+            description = model.description?.value,
         )
     }
 }
@@ -67,6 +68,6 @@ private fun EffortEntity.toModel(): EffortModel {
         startTime = LocalTime.parse(startTime),
         endTime = LocalTime.parse(endTime),
         leave = leave,
-        description = EffortDescription(""), // TODO set it from entity
+        description = description?.let { EffortDescription(it) },
     )
 }

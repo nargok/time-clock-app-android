@@ -67,7 +67,6 @@ class EffortRegisterViewModel @Inject constructor(
 
     fun save() {
         viewModelScope.launch(Dispatchers.IO) {
-            // TODO handle create or update
             val model = EffortModel.create(
                 date = uiState.selectedDate,
                 startTime = uiState.startTime,
@@ -75,8 +74,6 @@ class EffortRegisterViewModel @Inject constructor(
                 leave = false, // TODO add uiState
                 description = EffortDescription(uiState.description),
             )
-            // TODO ここで登録ができなくなった。
-            // TODO handle register or update
             repository.save(model)
             // TODO handle success or failure
             _saveSuccess.value = true
