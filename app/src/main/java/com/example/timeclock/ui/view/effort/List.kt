@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -64,6 +65,14 @@ fun EffortListScreen(
                         Text("作業記録 ${uiState.selectedYearMonth.year}/${uiState.selectedYearMonth.monthValue}")
                         IconButton(onClick = { viewModel.setNextYearMonth() }) {
                             Icon(Icons.Default.ArrowForward, contentDescription = "Next  Month")
+                        }
+                        IconButton(onClick = {
+                            navController.navigate("standardWorkingHourEdit/${uiState.selectedYearMonth}")
+                        }) {
+                            Icon(
+                                Icons.Default.Edit,
+                                contentDescription = "Go to Standard working hours"
+                            )
                         }
                     }
                 },
@@ -131,6 +140,7 @@ fun EffortListScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun EffortListItem(effort: EffortModel, onClick: () -> Unit) {
     Column(

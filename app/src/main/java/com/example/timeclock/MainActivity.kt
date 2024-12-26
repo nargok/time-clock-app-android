@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -21,14 +22,17 @@ import com.example.timeclock.ui.theme.TimeClockTheme
 import com.example.timeclock.ui.view.effort.EffortEditScreen
 import com.example.timeclock.ui.view.effort.EffortListScreen
 import com.example.timeclock.ui.view.effort.EffortRegisterScreen
+import com.example.timeclock.ui.view.effort.standard_working_hours.StandardWorkingHourEdit
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
+import java.time.YearMonth
 
 @HiltAndroidApp
 class TimeClockApplication : Application()
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -50,25 +54,35 @@ class MainActivity : ComponentActivity() {
                                 EffortId.reconstruct(it)
                             } ?: return@composable
                             EffortEditScreen(id, navController)
-                        } }
+                        }
+                        composable(
+                            "standardWorkingHourEdit/{yearMonth}",
+                            arguments = listOf(navArgument("yearMonth") { type = NavType.StringType })
+                        ) { backStackEntry ->
+                            val yearMonth = backStackEntry.arguments?.getString("yearMonth")?.let {
+                                YearMonth.parse(it)
+                            } ?: return@composable
+                            StandardWorkingHourEdit(yearMonth, navController)
+                        }
                     }
                 }
             }
         }
     }
+}
 
-    @Composable
-    fun Greeting(name: String, modifier: Modifier = Modifier) {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier
-        )
-    }
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
+}
 
-    @Preview(showBackground = true)
-    @Composable
-    fun GreetingPreview() {
-        TimeClockTheme {
-            Greeting("Android")
-        }
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    TimeClockTheme {
+        Greeting("Android")
     }
+}
