@@ -1,10 +1,10 @@
 package com.example.timeclock.domain.repository
 
 import com.example.timeclock.domain.model.StandardWorkingHourModel
-import java.time.YearMonth
+import com.example.timeclock.domain.model.vo.StandardWorkingHourId
 
 interface StandardWorkingHourRepository {
-    fun find(yearMonth: YearMonth): StandardWorkingHourModel?
+    fun find(id: StandardWorkingHourId): StandardWorkingHourModel?
 
-    fun save(model: StandardWorkingHourModel)
+    suspend fun save(model: StandardWorkingHourModel)
 }
