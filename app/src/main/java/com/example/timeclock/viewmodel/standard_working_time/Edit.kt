@@ -49,13 +49,13 @@ class StandardWorkingTimeEditViewModel @Inject constructor(
         }
     }
 
-    fun save(id: StandardWorkingHourId) {
+    fun save(yearMonth: YearMonth) {
         viewModelScope.launch(Dispatchers.IO) {
-            val existingHour = repository.find(id)
+            val existingHour = repository.findByYearMonth(yearMonth)
 
             if (existingHour != null) {
                 val model = StandardWorkingHourModel.reconstruct(
-                    id = id.value,
+                    id = existingHour.id.value,
                     yearMonth = existingHour.yearMonth,
                     hour = uiState.workingTime!!.value
                 )

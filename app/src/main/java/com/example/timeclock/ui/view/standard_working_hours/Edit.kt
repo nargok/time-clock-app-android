@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -27,12 +26,10 @@ fun StandardWorkingHourEdit(
     navController: NavController,
     viewModel: StandardWorkingTimeEditViewModel = hiltViewModel(),
 ) {
-
     val uiState = viewModel.uiState
-    val saveSuccess by viewModel.saveSuccess
 
     LaunchedEffect(Unit) {
-//        viewModel.fetchStandardWorkingTime(yearMonth)
+        viewModel.fetchStandardWorkingTime(yearMonth)
     }
 
     Scaffold(
@@ -61,7 +58,8 @@ fun StandardWorkingHourEdit(
             )
 
             Button(onClick = {
-                // TODO saveに成功・失敗したらMessageを表示
+                viewModel.save(yearMonth)
+                navController.navigate("effortList")
             }, modifier = Modifier.padding(16.dp)) {
                 Text("保存")
             }
