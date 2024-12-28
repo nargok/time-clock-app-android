@@ -17,6 +17,9 @@ class StandardWorkingHourRepositoryImpl @Inject constructor(
     override fun find(id: StandardWorkingHourId) =
         standardWorkingHourDao.findByYearMonth(id.toString())?.let { it.toModel() }
 
+    override fun findByYearMonth(yearMonth: YearMonth) =
+        standardWorkingHourDao.findByYearMonth(yearMonth.toString())?.let { it.toModel() }
+
     override suspend fun save(model: StandardWorkingHourModel) {
         val existingStandardWorkingHour = standardWorkingHourDao.findByYearMonth(model.yearMonth.toString())
 

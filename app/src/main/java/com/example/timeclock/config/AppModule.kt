@@ -3,8 +3,11 @@ package com.example.timeclock.config
 import android.app.Application
 import androidx.room.Room
 import com.example.timeclock.data.db.dao.EffortDao
+import com.example.timeclock.data.db.dao.StandardWorkingHourDao
 import com.example.timeclock.domain.repository.EffortRepository
+import com.example.timeclock.domain.repository.StandardWorkingHourRepository
 import com.example.timeclock.infrastructure.repository.EffortRepositoryImpl
+import com.example.timeclock.infrastructure.repository.StandardWorkingHourRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +27,7 @@ object AppModule {
             TimeClockDatabase.DATABASE_NAME
         ).addMigrations(TimeClockDatabase.MIGRATION_1_2)
             .addMigrations(TimeClockDatabase.MIGRATION_2_3)
+            .addMigrations(TimeClockDatabase.MIGRATION_3_4)
             .build()
     }
 
@@ -37,5 +41,17 @@ object AppModule {
     @Singleton
     fun provideEffortRepository(effortDao: EffortDao): EffortRepository {
         return EffortRepositoryImpl(effortDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStandardWorkingHourDao(db: TimeClockDatabase): StandardWorkingHourDao {
+        return db.standardWorkingHourDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideStandardWorkingRepository(standardWorkingHourDao: StandardWorkingHourDao): StandardWorkingHourRepository {
+        return StandardWorkingHourRepositoryImpl(standardWorkingHourDao)
     }
 }

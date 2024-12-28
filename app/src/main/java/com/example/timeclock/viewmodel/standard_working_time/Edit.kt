@@ -5,9 +5,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.timeclock.domain.model.StandardWorkingHourModel
 import com.example.timeclock.domain.model.vo.StandardWorkingHour
 import com.example.timeclock.domain.model.vo.StandardWorkingHourId
+import com.example.timeclock.domain.repository.StandardWorkingHourRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.YearMonth
 import javax.inject.Inject
 
 data class StandardWorkingTimeEditUiState(
@@ -17,7 +23,7 @@ data class StandardWorkingTimeEditUiState(
 
 @HiltViewModel
 class StandardWorkingTimeEditViewModel @Inject constructor(
-
+    private val repository: StandardWorkingHourRepository
 ) : ViewModel() {
 
     var uiState by mutableStateOf(StandardWorkingTimeEditUiState())
@@ -30,7 +36,38 @@ class StandardWorkingTimeEditViewModel @Inject constructor(
         uiState = uiState.copy(workingTime = StandardWorkingHour(workingTime.toInt()))
     }
 
-    fun fetchStandardWorkingTime(id: StandardWorkingHourId) {}
+    fun fetchStandardWorkingTime(yearMonth: YearMonth) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val model = repository.findByYearMonth(yearMonth)
 
-    fun save() {}
+            if (model != null) {
+                uiState = StandardWorkingTimeEditUiState(
+                    id = model.id,
+                    workingTime = model.hour
+                )
+            }
+        }
+    }
+
+    fun save(id: StandardWorkingHourId) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val existingHour = repository.find(id)
+
+            if (existingHour != null) {
+                val model = StandardWorkingHourModel.reconstruct(
+                    id = id.value,
+                    yearMonth = existingHour.yearMonth,
+                    hour = uiState.workingTime!!.value
+                )
+                repository.save(model)
+                return@launch
+            }
+
+            val model = StandardWorkingHourModel.create(
+                yearMonth = YearMonth.now(),
+                hour = requireNotNull(uiState.workingTime?.value)
+            )
+            repository.save(model)
+        }
+    }
 }

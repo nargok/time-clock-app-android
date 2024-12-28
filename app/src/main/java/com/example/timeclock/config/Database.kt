@@ -5,14 +5,28 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.timeclock.data.db.dao.EffortDao
+import com.example.timeclock.data.db.dao.StandardWorkingHourDao
 import com.example.timeclock.data.db.entity.EffortEntity
+import com.example.timeclock.data.db.entity.StandardWorkingHourEntity
 
-@Database(entities = [EffortEntity::class], version = 3)
+@Database(
+    entities = [
+        EffortEntity::class,
+        StandardWorkingHourEntity::class,
+    ],
+    version = 4
+)
 abstract class TimeClockDatabase : RoomDatabase() {
     abstract fun effortDao(): EffortDao
+    abstract fun standardWorkingHourDao(): StandardWorkingHourDao
 
     companion object {
         const val DATABASE_NAME = "time_clock_database"
+
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+            }
+        }
 
         val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {

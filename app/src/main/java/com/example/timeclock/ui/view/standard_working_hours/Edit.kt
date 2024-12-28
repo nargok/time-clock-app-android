@@ -32,7 +32,7 @@ fun StandardWorkingHourEdit(
     val saveSuccess by viewModel.saveSuccess
 
     LaunchedEffect(Unit) {
-        // TODO fetchStandardWorkingTime
+//        viewModel.fetchStandardWorkingTime(yearMonth)
     }
 
     Scaffold(
