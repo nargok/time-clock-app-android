@@ -23,6 +23,7 @@ object AppModule {
             TimeClockDatabase::class.java,
             TimeClockDatabase.DATABASE_NAME
         ).addMigrations(TimeClockDatabase.MIGRATION_1_2)
+            .addMigrations(TimeClockDatabase.MIGRATION_2_3)
             .build()
     }
 

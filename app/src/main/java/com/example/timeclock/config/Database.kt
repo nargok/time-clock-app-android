@@ -7,12 +7,19 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.timeclock.data.db.dao.EffortDao
 import com.example.timeclock.data.db.entity.EffortEntity
 
-@Database(entities = [EffortEntity::class], version = 2)
+@Database(entities = [EffortEntity::class], version = 3)
 abstract class TimeClockDatabase : RoomDatabase() {
     abstract fun effortDao(): EffortDao
 
     companion object {
         const val DATABASE_NAME = "time_clock_database"
+
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE standard_working_hour (id TEXT NOT NULL, year_month TEXT NOT NULL, hour INTEGER NOT NULL, created_at INTEGER NOT NULL, PRIMARY KEY(id))")
+                database.execSQL("CREATE UNIQUE INDEX index_standard_working_hour_year_month ON standard_working_hour(year_month)")
+            }
+        }
 
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
