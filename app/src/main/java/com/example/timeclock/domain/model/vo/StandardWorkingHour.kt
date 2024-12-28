@@ -1,21 +1,20 @@
 package com.example.timeclock.domain.model.vo
 
 import de.huxhorn.sulky.ulid.ULID
-import java.time.LocalTime
 
 /**
  * 標準勤務時間ID
  */
-data class StandardWorkingTimeId private constructor(val value: String){
+data class StandardWorkingHourId private constructor(val value: String){
     companion object {
         private val ulid = ULID()
 
-        fun create(): StandardWorkingTimeId {
-            return StandardWorkingTimeId(ulid.nextULID())
+        fun create(): StandardWorkingHourId {
+            return StandardWorkingHourId(ulid.nextULID())
         }
 
-        fun reconstruct(id: String): StandardWorkingTimeId {
-            return StandardWorkingTimeId(id)
+        fun reconstruct(id: String): StandardWorkingHourId {
+            return StandardWorkingHourId(id)
         }
     }
 
@@ -27,7 +26,7 @@ data class StandardWorkingTimeId private constructor(val value: String){
 /**
  * 標準勤務時間
  */
-data class StandardWorkingTime(val value: Int) {
+data class StandardWorkingHour(val value: Int) {
 
     init {
         require(value in 0..MAX_TIME) {

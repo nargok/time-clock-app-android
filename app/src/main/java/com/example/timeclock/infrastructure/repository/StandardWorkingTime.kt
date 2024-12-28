@@ -1,20 +1,22 @@
 package com.example.timeclock.infrastructure.repository
 
-import com.example.timeclock.domain.model.StandardWorkingTimeModel
-import com.example.timeclock.domain.repository.StandardWorkingTimeRepository
+import com.example.timeclock.data.db.dao.StandardWorkingHourDao
+import com.example.timeclock.domain.model.StandardWorkingHourModel
+import com.example.timeclock.domain.repository.StandardWorkingHourRepository
 import java.time.YearMonth
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class StandardWorkingTimeRepositoryImpl @Inject constructor(
+class StandardWorkingHourRepositoryImpl @Inject constructor(
+    private val standardWorkingHourDao: StandardWorkingHourDao,
+): StandardWorkingHourRepository {
 
-): StandardWorkingTimeRepository {
-    override fun find(yearMonth: YearMonth): StandardWorkingTimeModel? {
+    override fun find(yearMonth: YearMonth): StandardWorkingHourModel? {
         TODO("Not yet implemented")
     }
 
-    override fun save(model: StandardWorkingTimeModel) {
+    override fun save(model: StandardWorkingHourModel) {
         TODO("Not yet implemented")
     }
 }

@@ -5,14 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.timeclock.domain.model.vo.StandardWorkingTime
-import com.example.timeclock.domain.model.vo.StandardWorkingTimeId
+import com.example.timeclock.domain.model.vo.StandardWorkingHour
+import com.example.timeclock.domain.model.vo.StandardWorkingHourId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 data class StandardWorkingTimeEditUiState(
-    val id: StandardWorkingTimeId? = null,
-    val workingTime: StandardWorkingTime? = null,
+    val id: StandardWorkingHourId? = null,
+    val workingTime: StandardWorkingHour? = null,
 )
 
 @HiltViewModel
@@ -27,10 +27,10 @@ class StandardWorkingTimeEditViewModel @Inject constructor(
     val saveSuccess: State<Boolean> = _saveSuccess
 
     fun updateWorkingTime(workingTime: String) {
-        uiState = uiState.copy(workingTime = StandardWorkingTime(workingTime.toInt()))
+        uiState = uiState.copy(workingTime = StandardWorkingHour(workingTime.toInt()))
     }
 
-    fun fetchStandardWorkingTime(id: StandardWorkingTimeId) {}
+    fun fetchStandardWorkingTime(id: StandardWorkingHourId) {}
 
     fun save() {}
 }
