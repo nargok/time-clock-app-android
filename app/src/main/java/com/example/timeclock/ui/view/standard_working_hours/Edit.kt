@@ -1,4 +1,4 @@
-package com.example.timeclock.ui.view.effort.standard_working_hours
+package com.example.timeclock.ui.view.standard_working_hours
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -10,18 +10,31 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.timeclock.viewmodel.standard_working_time.StandardWorkingTimeEditViewModel
 import java.time.YearMonth
 
 @ExperimentalMaterial3Api
 @Composable
 fun StandardWorkingHourEdit(
     yearMonth: YearMonth,
-    navController: NavController
+    navController: NavController,
+    viewModel: StandardWorkingTimeEditViewModel = hiltViewModel(),
 ) {
+
+    val uiState = viewModel.uiState
+    val saveSuccess by viewModel.saveSuccess
+
+    LaunchedEffect(Unit) {
+        // TODO fetchStandardWorkingTime
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -36,8 +49,12 @@ fun StandardWorkingHourEdit(
                 .padding(paddingValues)
         ) {
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = uiState.workingTime?.let { it.value.toString() } ?: "",
+                onValueChange = {
+                    if (it.toIntOrNull() != null) {
+                        viewModel.updateWorkingTime(it)
+                    }
+                },
                 label = { Text("時間(H)") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.padding(horizontal = 16.dp),

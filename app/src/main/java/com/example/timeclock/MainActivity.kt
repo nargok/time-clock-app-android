@@ -22,7 +22,7 @@ import com.example.timeclock.ui.theme.TimeClockTheme
 import com.example.timeclock.ui.view.effort.EffortEditScreen
 import com.example.timeclock.ui.view.effort.EffortListScreen
 import com.example.timeclock.ui.view.effort.EffortRegisterScreen
-import com.example.timeclock.ui.view.effort.standard_working_hours.StandardWorkingHourEdit
+import com.example.timeclock.ui.view.standard_working_hours.StandardWorkingHourEdit
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import java.time.YearMonth
