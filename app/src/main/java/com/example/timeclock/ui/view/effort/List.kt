@@ -93,7 +93,7 @@ fun EffortListScreen(
                 // FIXME 最初から全項目表示してもよいかも
                 if (uiState.displayEffortSummary) {
                     Text(
-                        "基準時間: 160時間(${monthlyEffort?.totalDays()}日)", // TODO 設定した基準時間を表示する
+                        "基準時間: ${viewModel.standardWorkingHour.value}時間(${monthlyEffort?.totalDays()}日)",
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
