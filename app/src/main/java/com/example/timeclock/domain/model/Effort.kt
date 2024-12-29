@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import com.example.timeclock.config.defaultWorkingHours
 import com.example.timeclock.domain.model.vo.EffortDescription
 import com.example.timeclock.domain.model.vo.EffortId
+import com.example.timeclock.domain.model.vo.StandardWorkingHour
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
@@ -52,7 +53,7 @@ data class EffortModel private constructor(
     }
 
     companion object {
-        val FIXED_BREAK_TIME = 1.0
+        const val FIXED_BREAK_TIME = 1.0
 
         fun create(date: LocalDate, startTime: LocalTime, endTime: LocalTime, leave: Boolean, description: EffortDescription?): EffortModel {
             return EffortModel(
@@ -97,6 +98,7 @@ data class EffortSearchCondition(
  */
 data class MonthlyEffortModel(
     val yearMonth: YearMonth,
+    val standardWorkingHour: StandardWorkingHour,
     val efforts: List<EffortModel>,
 ) {
     /**
@@ -122,7 +124,7 @@ data class MonthlyEffortModel(
      * 作業日数
      */
     fun totalDays(): Int {
-        return TOTAL_WORKING_HOURS / WORKING_HOURS_PER_DAY
+        return standardWorkingHour.value / WORKING_HOURS_PER_DAY
     }
 
     /**
@@ -149,7 +151,6 @@ data class MonthlyEffortModel(
     }
 
     companion object {
-        private val TOTAL_WORKING_HOURS = 160 // TODO get it from database
-        private val WORKING_HOURS_PER_DAY = 8
+        private const val WORKING_HOURS_PER_DAY = 8
     }
 }

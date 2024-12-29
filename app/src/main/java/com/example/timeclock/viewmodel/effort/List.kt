@@ -9,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.timeclock.domain.model.EffortModel
 import com.example.timeclock.domain.model.EffortSearchCondition
 import com.example.timeclock.domain.model.MonthlyEffortModel
+import com.example.timeclock.domain.model.vo.StandardWorkingHour
 import com.example.timeclock.domain.repository.EffortRepository
+import com.example.timeclock.domain.repository.StandardWorkingHourRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,7 +25,8 @@ data class EffortListUiState(
 
 @HiltViewModel
 class EffortListViewModel @Inject constructor(
-    private val repository: EffortRepository
+    private val repository: EffortRepository,
+    private val standardWorkingHourRepository: StandardWorkingHourRepository,
 ) : ViewModel() {
 
     var uiState by mutableStateOf(EffortListUiState())
@@ -33,6 +36,8 @@ class EffortListViewModel @Inject constructor(
     val efforts: State<List<EffortModel>> = _efforts
     private val _monthlyEfforts = mutableStateOf<MonthlyEffortModel?>(null)
     val monthlyEfforts: State<MonthlyEffortModel?> = _monthlyEfforts
+    private val _standardWorkingHour = mutableStateOf(0)
+    val standardWorkingHour: State<Int> = _standardWorkingHour
 
     fun setPreviousYearMonth() {
         uiState = uiState.copy(selectedYearMonth = uiState.selectedYearMonth.minusMonths(1))
@@ -54,7 +59,15 @@ class EffortListViewModel @Inject constructor(
                 EffortSearchCondition(uiState.selectedYearMonth)
             val efforts = repository.search(condition)
             _efforts.value = efforts
-            _monthlyEfforts.value = MonthlyEffortModel(uiState.selectedYearMonth, efforts)
+
+            val standardWorkingHour = standardWorkingHourRepository.findByYearMonth(uiState.selectedYearMonth)
+            _standardWorkingHour.value = standardWorkingHour?.hour?.value ?: 0
+
+            _monthlyEfforts.value = MonthlyEffortModel(
+                yearMonth = uiState.selectedYearMonth,
+                standardWorkingHour = StandardWorkingHour(_standardWorkingHour.value),
+                efforts = efforts
+            )
         }
     }
 }
