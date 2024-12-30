@@ -15,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.timeclock"
+        applicationId = "com.nargok.timeclock"
         minSdk = 29
         targetSdk = 34
         versionCode = 1
