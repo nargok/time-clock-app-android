@@ -12,5 +12,7 @@ interface EffortRepository {
 
     fun find(id: EffortId): EffortModel?
 
-    suspend fun save(model: EffortModel)
+    suspend fun register(model: EffortModel)
+
+    suspend fun update(model: EffortModel)
 }

@@ -81,7 +81,7 @@ class EffortRegisterViewModel @Inject constructor(
                 description = EffortDescription(uiState.description),
             )
             try {
-                repository.save(model)
+                repository.register(model)
                 _saveSuccess.value = true
             } catch (e: Exception) {
                 _failedToRegister.value = true

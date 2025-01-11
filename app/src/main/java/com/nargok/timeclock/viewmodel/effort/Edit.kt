@@ -90,9 +90,6 @@ class EffortEditViewModel @Inject constructor(
 
     fun save(id: EffortId) {
         viewModelScope.launch(Dispatchers.IO) {
-            val exitingEffort = repository.find(id)
-            checkNotNull(exitingEffort)
-
             val model = EffortModel.reconstruct(
                 id = id,
                 date = requireNotNull(uiState.selectedDate),
@@ -102,7 +99,7 @@ class EffortEditViewModel @Inject constructor(
                 description = EffortDescription(uiState.description),
             )
             try {
-                repository.save(model)
+                repository.update(model)
                 _saveSuccess.value = true
             } catch (e: Exception) {
                 _failedToUpdate.value = true
