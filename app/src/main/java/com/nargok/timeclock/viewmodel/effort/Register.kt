@@ -36,6 +36,8 @@ class EffortRegisterViewModel @Inject constructor(
 
     private val _saveSuccess = mutableStateOf(false)
     val saveSuccess: State<Boolean> = _saveSuccess
+    private val _failedToRegister = mutableStateOf(false)
+    val failedToRegister: State<Boolean> = _failedToRegister
 
     fun updateDate(date: LocalDate) {
         uiState = uiState.copy(selectedDate = date)
@@ -65,6 +67,10 @@ class EffortRegisterViewModel @Inject constructor(
         uiState = uiState.copy(showEndTimePicker = show)
     }
 
+    fun clearFailedToRegister() {
+        _failedToRegister.value = false
+    }
+
     fun save() {
         viewModelScope.launch(Dispatchers.IO) {
             val model = EffortModel.create(
@@ -74,9 +80,12 @@ class EffortRegisterViewModel @Inject constructor(
                 leave = false, // TODO add uiState
                 description = EffortDescription(uiState.description),
             )
-            repository.save(model)
-            // TODO handle success or failure
-            _saveSuccess.value = true
+            try {
+                repository.save(model)
+                _saveSuccess.value = true
+            } catch (e: Exception) {
+                _failedToRegister.value = true
+            }
         }
     }
 }
