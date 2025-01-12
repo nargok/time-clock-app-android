@@ -51,6 +51,7 @@ fun EffortEditScreen(
     val uiState = viewModel.uiState
     val snackBarHostState = remember { SnackbarHostState() }
     val saveSuccess by viewModel.saveSuccess
+    val failedToUpdate by viewModel.failedToUpdate
 
     LaunchedEffect(Unit) {
         viewModel.fetchEffort(id)
@@ -212,7 +213,15 @@ fun EffortEditScreen(
                 navController.navigate("effortList")
             }
         }
-
+        LaunchedEffect(failedToUpdate) {
+            if (failedToUpdate) {
+                snackBarHostState.showSnackbar(
+                    message = "更新に失敗しました",
+                    duration = SnackbarDuration.Short
+                )
+                viewModel.closeFailedToUpdate()
+            }
+        }
         SnackbarHost(hostState = snackBarHostState)
     }
 }

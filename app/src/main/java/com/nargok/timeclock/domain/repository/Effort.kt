@@ -3,6 +3,7 @@ package com.example.timeclock.domain.repository
 import com.example.timeclock.domain.model.EffortModel
 import com.example.timeclock.domain.model.EffortSearchCondition
 import com.example.timeclock.domain.model.vo.EffortId
+import java.time.LocalDate
 
 /**
  * 作業記録リポジトリ
@@ -12,5 +13,9 @@ interface EffortRepository {
 
     fun find(id: EffortId): EffortModel?
 
-    suspend fun save(model: EffortModel)
+    fun findByDate(date: LocalDate): EffortModel?
+
+    suspend fun register(model: EffortModel)
+
+    suspend fun update(model: EffortModel)
 }

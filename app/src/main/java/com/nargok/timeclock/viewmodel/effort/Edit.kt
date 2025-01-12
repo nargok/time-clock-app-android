@@ -38,6 +38,8 @@ class EffortEditViewModel @Inject constructor(
 
     private val _saveSuccess = mutableStateOf(false)
     val saveSuccess: State<Boolean> = _saveSuccess
+    private val _failedToUpdate = mutableStateOf(false)
+    val failedToUpdate: State<Boolean> = _failedToUpdate
 
     fun updateDate(date: LocalDate) {
         uiState = uiState.copy(selectedDate = date)
@@ -82,23 +84,27 @@ class EffortEditViewModel @Inject constructor(
         }
     }
 
+    fun closeFailedToUpdate() {
+        _failedToUpdate.value = false
+    }
+
     fun save(id: EffortId) {
         viewModelScope.launch(Dispatchers.IO) {
-            val exitingEffort = repository.find(id)
-            checkNotNull(exitingEffort)
-
             val model = EffortModel.reconstruct(
                 id = id,
-                date = exitingEffort.date,
+                date = requireNotNull(uiState.selectedDate),
                 startTime = requireNotNull(uiState.startTime),
                 endTime = requireNotNull(uiState.endTime),
                 leave = false, // TODO set it from uiState
                 description = EffortDescription(uiState.description),
             )
-            // TODO handle register or update
-            repository.save(model)
-            // TODO handle success or failure
-            _saveSuccess.value = true
+            try {
+                repository.update(model)
+                _saveSuccess.value = true
+            } catch (e: Exception) {
+                _failedToUpdate.value = true
+                println("EditEffortViewModel.save: $e")
+            }
         }
     }
 }

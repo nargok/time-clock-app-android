@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.timeclock.domain.model.EffortModel
 import com.example.timeclock.domain.model.vo.EffortDescription
-import com.example.timeclock.domain.repository.EffortRepository
+import com.nargok.timeclock.domain.service.EffortService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ import java.time.LocalTime
 import javax.inject.Inject
 
 data class EffortUiState(
-    val selectedDate: LocalDate = LocalDate.now(), // TODO まだ未登録の日付を初期値とする
+    val selectedDate: LocalDate = LocalDate.now(),
     val startTime: LocalTime = LocalTime.parse("09:00"), // TODO customize default start time
     val endTime: LocalTime = LocalTime.parse("18:00"), // TODO customize default end time
     val description: String = "",
@@ -28,7 +28,7 @@ data class EffortUiState(
 
 @HiltViewModel
 class EffortRegisterViewModel @Inject constructor(
-    private val repository: EffortRepository
+    private val effortService: EffortService
 ) : ViewModel() {
 
     var uiState by mutableStateOf(EffortUiState())
@@ -36,6 +36,8 @@ class EffortRegisterViewModel @Inject constructor(
 
     private val _saveSuccess = mutableStateOf(false)
     val saveSuccess: State<Boolean> = _saveSuccess
+    private val _failedToRegister = mutableStateOf(false)
+    val failedToRegister: State<Boolean> = _failedToRegister
 
     fun updateDate(date: LocalDate) {
         uiState = uiState.copy(selectedDate = date)
@@ -65,6 +67,10 @@ class EffortRegisterViewModel @Inject constructor(
         uiState = uiState.copy(showEndTimePicker = show)
     }
 
+    fun clearFailedToRegister() {
+        _failedToRegister.value = false
+    }
+
     fun save() {
         viewModelScope.launch(Dispatchers.IO) {
             val model = EffortModel.create(
@@ -74,9 +80,12 @@ class EffortRegisterViewModel @Inject constructor(
                 leave = false, // TODO add uiState
                 description = EffortDescription(uiState.description),
             )
-            repository.save(model)
-            // TODO handle success or failure
-            _saveSuccess.value = true
+            try {
+                effortService.register(model)
+                _saveSuccess.value = true
+            } catch (e: Exception) {
+                _failedToRegister.value = true
+            }
         }
     }
 }

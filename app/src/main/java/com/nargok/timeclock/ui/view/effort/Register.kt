@@ -49,6 +49,7 @@ fun EffortRegisterScreen(
     val uiState = viewModel.uiState
     val snackBarHostState = remember { SnackbarHostState() }
     val saveSuccess by viewModel.saveSuccess
+    val failedToRegister by viewModel.failedToRegister
 
     Box(
         modifier = Modifier
@@ -204,6 +205,16 @@ fun EffortRegisterScreen(
                     duration = SnackbarDuration.Short // TODO もうちょっと短くしたい
                 )
                 navController.navigate("effortList")
+            }
+        }
+
+        LaunchedEffect(failedToRegister) {
+            if (failedToRegister) {
+                snackBarHostState.showSnackbar(
+                    message = "保存に失敗しました",
+                    duration = SnackbarDuration.Short
+                )
+                viewModel.clearFailedToRegister()
             }
         }
 

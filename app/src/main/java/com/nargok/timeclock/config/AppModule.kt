@@ -8,6 +8,8 @@ import com.example.timeclock.domain.repository.EffortRepository
 import com.example.timeclock.domain.repository.StandardWorkingHourRepository
 import com.example.timeclock.infrastructure.repository.EffortRepositoryImpl
 import com.example.timeclock.infrastructure.repository.StandardWorkingHourRepositoryImpl
+import com.nargok.timeclock.domain.service.EffortService
+import com.nargok.timeclock.infrastructure.service.EffortServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +30,7 @@ object AppModule {
         ).addMigrations(TimeClockDatabase.MIGRATION_1_2)
             .addMigrations(TimeClockDatabase.MIGRATION_2_3)
             .addMigrations(TimeClockDatabase.MIGRATION_3_4)
+            .addMigrations(TimeClockDatabase.MIGRATION_4_5)
             .build()
     }
 
@@ -53,5 +56,11 @@ object AppModule {
     @Singleton
     fun provideStandardWorkingRepository(standardWorkingHourDao: StandardWorkingHourDao): StandardWorkingHourRepository {
         return StandardWorkingHourRepositoryImpl(standardWorkingHourDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEffortService(effortRepository: EffortRepository): EffortService {
+        return EffortServiceImpl(effortRepository)
     }
 }
