@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Singleton
 class EffortRepositoryImpl @Inject constructor(
     private val effortDao: EffortDao,
-): EffortRepository {
+) : EffortRepository {
     override fun search(condition: EffortSearchCondition): List<EffortModel> {
         val yearMonth = condition.yearMonth
         val start = yearMonth.atDay(1).toString()
@@ -25,6 +25,9 @@ class EffortRepositoryImpl @Inject constructor(
     }
 
     override fun find(id: EffortId) = effortDao.findEffortById(id.value)?.let { it.toModel() }
+
+    override fun findByDate(date: LocalDate): EffortModel? =
+        effortDao.findEffortByDate(date.toString())?.let { it.toModel() }
 
     override suspend fun register(model: EffortModel) {
         effortDao.insertEffort(model.toEntity())
