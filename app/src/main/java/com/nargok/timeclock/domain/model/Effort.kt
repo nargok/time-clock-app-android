@@ -40,9 +40,9 @@ data class EffortModel private constructor(
      * 作業時間
      */
     @RequiresApi(Build.VERSION_CODES.S)
-    fun workingTime(): Double {
-        val duration = Duration.between(startTime, endTime)
-        return duration.toHours().toDouble() + (duration.toMinutesPart() * 0.01) - FIXED_BREAK_TIME
+    fun workingTime(): String {
+        val duration = workingTimeDuration()
+        return String.format("%.2f", duration.toHours().toDouble() + (duration.toMinutesPart() * 0.01) - FIXED_BREAK_TIME)
     }
 
     /**
