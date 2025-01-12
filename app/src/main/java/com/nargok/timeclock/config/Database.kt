@@ -14,7 +14,7 @@ import com.example.timeclock.data.db.entity.StandardWorkingHourEntity
         EffortEntity::class,
         StandardWorkingHourEntity::class,
     ],
-    version = 4
+    version = 5
 )
 abstract class TimeClockDatabase : RoomDatabase() {
     abstract fun effortDao(): EffortDao
@@ -22,6 +22,13 @@ abstract class TimeClockDatabase : RoomDatabase() {
 
     companion object {
         const val DATABASE_NAME = "time_clock_database"
+
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DROP INDEX IF EXISTS `index_effort_date`;")
+                database.execSQL("CREATE UNIQUE INDEX index_effort_date ON effort(date)")
+            }
+        }
 
         val MIGRATION_3_4 = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {

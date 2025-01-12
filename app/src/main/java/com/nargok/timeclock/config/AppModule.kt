@@ -30,6 +30,7 @@ object AppModule {
         ).addMigrations(TimeClockDatabase.MIGRATION_1_2)
             .addMigrations(TimeClockDatabase.MIGRATION_2_3)
             .addMigrations(TimeClockDatabase.MIGRATION_3_4)
+            .addMigrations(TimeClockDatabase.MIGRATION_4_5)
             .build()
     }
 

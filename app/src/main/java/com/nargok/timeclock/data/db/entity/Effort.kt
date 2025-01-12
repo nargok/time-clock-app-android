@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "effort",
     indices = [
-        Index(value = ["date"], unique = false)
+        Index(value = ["date"], unique = true)
     ]
 )
 data class EffortEntity(
