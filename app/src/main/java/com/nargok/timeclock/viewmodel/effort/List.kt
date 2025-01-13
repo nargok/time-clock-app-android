@@ -1,4 +1,4 @@
-package com.example.timeclock.viewmodel.effort
+package com.nargok.timeclock.viewmodel.effort
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -6,12 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.timeclock.domain.model.EffortModel
-import com.example.timeclock.domain.model.EffortSearchCondition
-import com.example.timeclock.domain.model.MonthlyEffortModel
-import com.example.timeclock.domain.model.vo.StandardWorkingHour
-import com.example.timeclock.domain.repository.EffortRepository
-import com.example.timeclock.domain.repository.StandardWorkingHourRepository
+import com.nargok.timeclock.domain.model.EffortModel
+import com.nargok.timeclock.domain.model.EffortSearchCondition
+import com.nargok.timeclock.domain.model.MonthlyEffortModel
+import com.nargok.timeclock.domain.model.vo.StandardWorkingHour
+import com.nargok.timeclock.domain.repository.EffortRepository
+import com.nargok.timeclock.domain.repository.StandardWorkingHourRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

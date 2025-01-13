@@ -1,7 +1,7 @@
 package com.nargok.timeclock.infrastructure.service
 
-import com.example.timeclock.domain.model.EffortModel
-import com.example.timeclock.domain.repository.EffortRepository
+import com.nargok.timeclock.domain.model.EffortModel
+import com.nargok.timeclock.domain.repository.EffortRepository
 import com.nargok.timeclock.domain.service.EffortService
 import java.time.LocalDate
 import javax.inject.Inject

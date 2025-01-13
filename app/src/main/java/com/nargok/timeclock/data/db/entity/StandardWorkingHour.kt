@@ -1,4 +1,4 @@
-package com.example.timeclock.data.db.entity
+package com.nargok.timeclock.data.db.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -1,13 +1,13 @@
-package com.example.timeclock.config
+package com.nargok.timeclock.config
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.timeclock.data.db.dao.EffortDao
-import com.example.timeclock.data.db.dao.StandardWorkingHourDao
-import com.example.timeclock.data.db.entity.EffortEntity
-import com.example.timeclock.data.db.entity.StandardWorkingHourEntity
+import com.nargok.timeclock.data.db.dao.EffortDao
+import com.nargok.timeclock.data.db.dao.StandardWorkingHourDao
+import com.nargok.timeclock.data.db.entity.EffortEntity
+import com.nargok.timeclock.data.db.entity.StandardWorkingHourEntity
 
 @Database(
     entities = [

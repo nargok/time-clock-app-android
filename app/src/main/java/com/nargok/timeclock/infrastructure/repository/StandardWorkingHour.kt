@@ -1,10 +1,10 @@
-package com.example.timeclock.infrastructure.repository
+package com.nargok.timeclock.infrastructure.repository
 
-import com.example.timeclock.data.db.dao.StandardWorkingHourDao
-import com.example.timeclock.data.db.entity.StandardWorkingHourEntity
-import com.example.timeclock.domain.model.StandardWorkingHourModel
-import com.example.timeclock.domain.model.vo.StandardWorkingHourId
-import com.example.timeclock.domain.repository.StandardWorkingHourRepository
+import com.nargok.timeclock.data.db.dao.StandardWorkingHourDao
+import com.nargok.timeclock.data.db.entity.StandardWorkingHourEntity
+import com.nargok.timeclock.domain.model.StandardWorkingHourModel
+import com.nargok.timeclock.domain.model.vo.StandardWorkingHourId
+import com.nargok.timeclock.domain.repository.StandardWorkingHourRepository
 import java.time.YearMonth
 import javax.inject.Inject
 import javax.inject.Singleton

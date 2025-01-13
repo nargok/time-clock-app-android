@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.timeclock"
+    namespace = "com.nargok.timeclock"
     compileSdk = 34
 
     room {

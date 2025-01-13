@@ -1,4 +1,4 @@
-package com.example.timeclock.ui.theme
+package com.nargok.timeclock.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

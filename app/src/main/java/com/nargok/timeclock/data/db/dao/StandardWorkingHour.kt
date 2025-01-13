@@ -1,9 +1,9 @@
-package com.example.timeclock.data.db.dao
+package com.nargok.timeclock.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.timeclock.data.db.entity.StandardWorkingHourEntity
+import com.nargok.timeclock.data.db.entity.StandardWorkingHourEntity
 
 @Dao
 interface StandardWorkingHourDao {

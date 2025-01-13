@@ -1,4 +1,4 @@
-package com.example.timeclock.config
+package com.nargok.timeclock.config
 
 // TODO 人によって変更できるようにする
 // 1日のデフォルトの労働時間

@@ -1,4 +1,4 @@
-package com.example.timeclock.ui.view.standard_working_hours
+package com.nargok.timeclock.ui.view.standard_working_hours
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,12 +16,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.timeclock.viewmodel.standard_working_time.StandardWorkingTimeEditViewModel
+import com.nargok.timeclock.viewmodel.standard_working_time.StandardWorkingTimeEditViewModel
+import com.nargok.timeclock.navigation.navigateToEffortList
 import java.time.YearMonth
 
 @ExperimentalMaterial3Api
 @Composable
-fun StandardWorkingHourEdit(
+fun StandardWorkingHourEditScreen(
     yearMonth: YearMonth,
     navController: NavController,
     viewModel: StandardWorkingTimeEditViewModel = hiltViewModel(),
@@ -59,7 +60,7 @@ fun StandardWorkingHourEdit(
 
             Button(onClick = {
                 viewModel.save(yearMonth)
-                navController.navigate("effortList")
+                navController.navigateToEffortList()
             }, modifier = Modifier.padding(16.dp)) {
                 Text("保存")
             }

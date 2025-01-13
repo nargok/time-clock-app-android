@@ -1,4 +1,4 @@
-package com.example.timeclock.domain.model.vo
+package com.nargok.timeclock.domain.model.vo
 
 import de.huxhorn.sulky.ulid.ULID
 

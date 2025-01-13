@@ -1,4 +1,4 @@
-package com.example.timeclock.viewmodel.standard_working_time
+package com.nargok.timeclock.viewmodel.standard_working_time
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -6,10 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.timeclock.domain.model.StandardWorkingHourModel
-import com.example.timeclock.domain.model.vo.StandardWorkingHour
-import com.example.timeclock.domain.model.vo.StandardWorkingHourId
-import com.example.timeclock.domain.repository.StandardWorkingHourRepository
+import com.nargok.timeclock.domain.model.StandardWorkingHourModel
+import com.nargok.timeclock.domain.model.vo.StandardWorkingHour
+import com.nargok.timeclock.domain.model.vo.StandardWorkingHourId
+import com.nargok.timeclock.domain.repository.StandardWorkingHourRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

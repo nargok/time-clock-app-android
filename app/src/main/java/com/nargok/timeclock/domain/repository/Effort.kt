@@ -1,8 +1,8 @@
-package com.example.timeclock.domain.repository
+package com.nargok.timeclock.domain.repository
 
-import com.example.timeclock.domain.model.EffortModel
-import com.example.timeclock.domain.model.EffortSearchCondition
-import com.example.timeclock.domain.model.vo.EffortId
+import com.nargok.timeclock.domain.model.EffortModel
+import com.nargok.timeclock.domain.model.EffortSearchCondition
+import com.nargok.timeclock.domain.model.vo.EffortId
 import java.time.LocalDate
 
 /**

@@ -1,4 +1,4 @@
-package com.example.timeclock.ui.theme
+package com.nargok.timeclock.ui.theme
 
 import android.app.Activity
 import android.os.Build
