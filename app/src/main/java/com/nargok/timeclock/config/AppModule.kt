@@ -1,13 +1,13 @@
-package com.example.timeclock.config
+package com.nargok.timeclock.config
 
 import android.app.Application
 import androidx.room.Room
-import com.example.timeclock.data.db.dao.EffortDao
-import com.example.timeclock.data.db.dao.StandardWorkingHourDao
-import com.example.timeclock.domain.repository.EffortRepository
-import com.example.timeclock.domain.repository.StandardWorkingHourRepository
-import com.example.timeclock.infrastructure.repository.EffortRepositoryImpl
-import com.example.timeclock.infrastructure.repository.StandardWorkingHourRepositoryImpl
+import com.nargok.timeclock.data.db.dao.EffortDao
+import com.nargok.timeclock.data.db.dao.StandardWorkingHourDao
+import com.nargok.timeclock.domain.repository.EffortRepository
+import com.nargok.timeclock.domain.repository.StandardWorkingHourRepository
+import com.nargok.timeclock.infrastructure.repository.EffortRepositoryImpl
+import com.nargok.timeclock.infrastructure.repository.StandardWorkingHourRepositoryImpl
 import com.nargok.timeclock.domain.service.EffortService
 import com.nargok.timeclock.infrastructure.service.EffortServiceImpl
 import dagger.Module

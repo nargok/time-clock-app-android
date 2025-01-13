@@ -1,4 +1,4 @@
-package com.example.timeclock.ui.view.effort.components
+package com.nargok.timeclock.ui.view.effort.components
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api

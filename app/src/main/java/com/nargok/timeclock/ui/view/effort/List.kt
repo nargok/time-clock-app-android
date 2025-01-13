@@ -1,4 +1,4 @@
-package com.example.timeclock.ui.view.effort
+package com.nargok.timeclock.ui.view.effort
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -21,19 +21,27 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.timeclock.domain.model.EffortModel
-import com.example.timeclock.viewmodel.effort.EffortListViewModel
+import com.nargok.timeclock.domain.model.EffortModel
+import com.nargok.timeclock.navigation.Screen
+import com.nargok.timeclock.viewmodel.effort.EffortListViewModel
+import com.nargok.timeclock.navigation.navigateToEffortEdit
+import com.nargok.timeclock.navigation.navigateToEffortRegister
+import com.nargok.timeclock.navigation.navigateToStandardWorkingHourEdit
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -41,14 +49,28 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun EffortListScreen(
     navController: NavController,
+    success: Boolean = false,
     viewModel: EffortListViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState
-    val efforts by viewModel.efforts
     val monthlyEffort by viewModel.monthlyEfforts
+    val snackBarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         viewModel.fetchMonthlyEfforts()
+    }
+
+    LaunchedEffect(success) {
+        if (success) {
+            snackBarHostState.showSnackbar(
+                message = "作業時間を更新しました。",
+                duration = SnackbarDuration.Short
+            )
+            // スナックバー表示後、URLパラメータをリセット
+            navController.navigate(Screen.EffortList.createRoute(false)) {
+                popUpTo(Screen.EffortList.route) { inclusive = true }
+            }
+        }
     }
 
     Scaffold(
@@ -67,7 +89,7 @@ fun EffortListScreen(
                             Icon(Icons.Default.ArrowForward, contentDescription = "Next  Month")
                         }
                         IconButton(onClick = {
-                            navController.navigate("standardWorkingHourEdit/${uiState.selectedYearMonth}")
+                            navController.navigateToStandardWorkingHourEdit(uiState.selectedYearMonth)
                         }) {
                             Icon(
                                 Icons.Default.Edit,
@@ -79,9 +101,12 @@ fun EffortListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("effortRegister") }) {
+            FloatingActionButton(onClick = { navController.navigateToEffortRegister() }) {
                 Icon(Icons.Filled.Add, contentDescription = "")
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState)
         }
     ) { paddingValues ->
         Column(
@@ -128,9 +153,9 @@ fun EffortListScreen(
                     .fillMaxSize()
                     .padding(16.dp),
             ) {
-                items(efforts) { effort ->
+                items(monthlyEffort?.effortList() ?: emptyList()) { effort ->
                     EffortListItem(effort) {
-                        navController.navigate("effortEdit/${effort.id.value}")
+                        navController.navigateToEffortEdit(effort.id)
                     }
                     Divider()
                 }

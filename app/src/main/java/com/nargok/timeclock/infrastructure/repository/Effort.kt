@@ -1,12 +1,12 @@
-package com.example.timeclock.infrastructure.repository
+package com.nargok.timeclock.infrastructure.repository
 
-import com.example.timeclock.data.db.dao.EffortDao
-import com.example.timeclock.data.db.entity.EffortEntity
-import com.example.timeclock.domain.model.EffortModel
-import com.example.timeclock.domain.model.EffortSearchCondition
-import com.example.timeclock.domain.model.vo.EffortDescription
-import com.example.timeclock.domain.model.vo.EffortId
-import com.example.timeclock.domain.repository.EffortRepository
+import com.nargok.timeclock.data.db.dao.EffortDao
+import com.nargok.timeclock.data.db.entity.EffortEntity
+import com.nargok.timeclock.domain.model.EffortModel
+import com.nargok.timeclock.domain.model.EffortSearchCondition
+import com.nargok.timeclock.domain.model.vo.EffortDescription
+import com.nargok.timeclock.domain.model.vo.EffortId
+import com.nargok.timeclock.domain.repository.EffortRepository
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject

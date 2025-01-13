@@ -1,7 +1,7 @@
-package com.example.timeclock.domain.repository
+package com.nargok.timeclock.domain.repository
 
-import com.example.timeclock.domain.model.StandardWorkingHourModel
-import com.example.timeclock.domain.model.vo.StandardWorkingHourId
+import com.nargok.timeclock.domain.model.StandardWorkingHourModel
+import com.nargok.timeclock.domain.model.vo.StandardWorkingHourId
 import java.time.YearMonth
 
 /**

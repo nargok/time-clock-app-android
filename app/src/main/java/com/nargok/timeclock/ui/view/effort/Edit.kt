@@ -1,4 +1,4 @@
-package com.example.timeclock.ui.view.effort
+package com.nargok.timeclock.ui.view.effort
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,9 +36,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.timeclock.domain.model.vo.EffortId
-import com.example.timeclock.ui.view.effort.components.EffortTimeDialog
-import com.example.timeclock.viewmodel.effort.EffortEditViewModel
+import com.nargok.timeclock.domain.model.vo.EffortId
+import com.nargok.timeclock.ui.view.effort.components.EffortTimeDialog
+import com.nargok.timeclock.viewmodel.effort.EffortEditViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,6 +46,8 @@ fun EffortEditScreen(
     id: EffortId,
     navController: NavController,
     viewModel: EffortEditViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit,
+    onSaveSuccess: () -> Unit,
 ) {
     val datePickerState = rememberDatePickerState()
     val uiState = viewModel.uiState
@@ -55,6 +57,22 @@ fun EffortEditScreen(
 
     LaunchedEffect(Unit) {
         viewModel.fetchEffort(id)
+    }
+
+    LaunchedEffect(saveSuccess) {
+        if (saveSuccess) {
+            onSaveSuccess()
+        }
+    }
+
+    LaunchedEffect(failedToUpdate) {
+        if (failedToUpdate) {
+            snackBarHostState.showSnackbar(
+                message = "更新に失敗しました",
+                duration = SnackbarDuration.Short
+            )
+            viewModel.closeFailedToUpdate()
+        }
     }
 
     Box(
@@ -189,39 +207,14 @@ fun EffortEditScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(onClick = {
-                println(
-                    """
-                日付: ${uiState.selectedDate}
-                開始: ${uiState.startTime}
-                終了: ${uiState.endTime}
-            """.trimIndent()
-                )
-                viewModel.save(requireNotNull(uiState.id))
-                // TODO saveに成功・失敗したらMessageを表示
-            }) {
+            Button(
+                onClick = { viewModel.save(requireNotNull(uiState.id)) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text("保存")
             }
         }
 
-        LaunchedEffect(saveSuccess) {
-            if (saveSuccess) {
-                snackBarHostState.showSnackbar(
-                    message = "保存しました",
-                    duration = SnackbarDuration.Short // TODO もうちょっと短くしたい
-                )
-                navController.navigate("effortList")
-            }
-        }
-        LaunchedEffect(failedToUpdate) {
-            if (failedToUpdate) {
-                snackBarHostState.showSnackbar(
-                    message = "更新に失敗しました",
-                    duration = SnackbarDuration.Short
-                )
-                viewModel.closeFailedToUpdate()
-            }
-        }
         SnackbarHost(hostState = snackBarHostState)
     }
 }

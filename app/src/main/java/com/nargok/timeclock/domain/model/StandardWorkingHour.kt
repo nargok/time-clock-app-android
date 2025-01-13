@@ -1,7 +1,7 @@
-package com.example.timeclock.domain.model
+package com.nargok.timeclock.domain.model
 
-import com.example.timeclock.domain.model.vo.StandardWorkingHour
-import com.example.timeclock.domain.model.vo.StandardWorkingHourId
+import com.nargok.timeclock.domain.model.vo.StandardWorkingHour
+import com.nargok.timeclock.domain.model.vo.StandardWorkingHourId
 import java.time.YearMonth
 
 data class StandardWorkingHourModel private constructor(

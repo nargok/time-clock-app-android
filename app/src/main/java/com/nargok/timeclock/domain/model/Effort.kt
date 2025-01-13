@@ -1,11 +1,11 @@
-package com.example.timeclock.domain.model
+package com.nargok.timeclock.domain.model
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.timeclock.config.defaultWorkingHours
-import com.example.timeclock.domain.model.vo.EffortDescription
-import com.example.timeclock.domain.model.vo.EffortId
-import com.example.timeclock.domain.model.vo.StandardWorkingHour
+import com.nargok.timeclock.config.defaultWorkingHours
+import com.nargok.timeclock.domain.model.vo.StandardWorkingHour
+import com.nargok.timeclock.domain.model.vo.EffortDescription
+import com.nargok.timeclock.domain.model.vo.EffortId
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
@@ -139,6 +139,13 @@ data class MonthlyEffortModel(
      */
     fun remainingDays(): Int {
         return totalDays() - efforts.size
+    }
+
+    /**
+     * 作業記録リスト
+     */
+    fun effortList(): List<EffortModel> {
+        return efforts.sortedByDescending { it.date }
     }
 
     /**

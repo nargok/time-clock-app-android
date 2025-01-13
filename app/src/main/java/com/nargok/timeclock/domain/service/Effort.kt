@@ -1,6 +1,6 @@
 package com.nargok.timeclock.domain.service
 
-import com.example.timeclock.domain.model.EffortModel
+import com.nargok.timeclock.domain.model.EffortModel
 import java.time.LocalDate
 
 /**
