@@ -18,7 +18,7 @@ import java.time.YearMonth
 @Composable
 fun TimeClockNavGraph(
     navController: NavHostController,
-    startDestination: String = "effortList?success={success}",
+    startDestination: String = Screen.EffortList.route,
 ) {
     NavHost(
         navController = navController,
@@ -26,7 +26,7 @@ fun TimeClockNavGraph(
     ) {
         // 作業時間リスト
         composable(
-            route = "effortList?success={success}",
+            route = Screen.EffortList.route,
             arguments = listOf(
                 navArgument("success") {
                     type = NavType.BoolType
@@ -46,18 +46,18 @@ fun TimeClockNavGraph(
                     navController.popBackStack()
                 },
                 onSaveSuccess = {
-                    navController.navigate(Screen.EffortList.route + "?success=true") {
+                    navController.navigate(Screen.EffortList.route) {
                         popUpTo(navController.graph.startDestinationId) { inclusive = true }
                     }
                 }
             )
         }
 
-        // 作業編集登録画面
+        // 作業編集画面
         composable(
             route = Screen.EffortEdit.route,
             arguments = listOf(
-                navArgument("id") {
+                navArgument("effortId") {
                     type = NavType.StringType
                 }
             )
@@ -72,7 +72,7 @@ fun TimeClockNavGraph(
                     navController.popBackStack()
                 },
                 onSaveSuccess = {
-                    navController.navigate(Screen.EffortList.route + "?success=true") {
+                    navController.navigate(Screen.EffortList.route) {
                         popUpTo(navController.graph.startDestinationId) { inclusive = true }
                     }
                 }

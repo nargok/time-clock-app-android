@@ -5,7 +5,7 @@ sealed class Screen(val route: String) {
         fun createRoute(success: Boolean) = "effortList?success=$success"
     }
     object EffortRegister : Screen("effortRegister")
-    object EffortEdit : Screen("effortEdit/{id}") {
+    object EffortEdit : Screen("effortEdit/{effortId}") {
         fun createRoute(effortId: String) = "effortEdit/$effortId"
     }
     object StandardWorkingHourEdit : Screen("standardWorkingHourEdit/{yearMonth}") {
