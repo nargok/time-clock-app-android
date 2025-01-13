@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nargok.timeclock.domain.model.EffortModel
+import com.nargok.timeclock.navigation.Screen
 import com.nargok.timeclock.viewmodel.effort.EffortListViewModel
 import com.nargok.timeclock.navigation.navigateToEffortEdit
 import com.nargok.timeclock.navigation.navigateToEffortRegister
@@ -65,6 +66,10 @@ fun EffortListScreen(
                 message = "作業時間を更新しました。",
                 duration = SnackbarDuration.Short
             )
+            // スナックバー表示後、URLパラメータをリセット
+            navController.navigate(Screen.EffortList.createRoute(false)) {
+                popUpTo(Screen.EffortList.route) { inclusive = true }
+            }
         }
     }
 
