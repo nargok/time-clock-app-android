@@ -142,6 +142,13 @@ data class MonthlyEffortModel(
     }
 
     /**
+     * 作業記録リスト
+     */
+    fun effortList(): List<EffortModel> {
+        return efforts.sortedByDescending { it.date }
+    }
+
+    /**
      * 平均作業時間
      */
     @RequiresApi(Build.VERSION_CODES.S)

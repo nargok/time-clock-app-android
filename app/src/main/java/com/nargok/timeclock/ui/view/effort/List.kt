@@ -52,7 +52,6 @@ fun EffortListScreen(
     viewModel: EffortListViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState
-    val efforts by viewModel.efforts
     val monthlyEffort by viewModel.monthlyEfforts
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -146,7 +145,7 @@ fun EffortListScreen(
                     .fillMaxSize()
                     .padding(16.dp),
             ) {
-                items(efforts) { effort ->
+                items(monthlyEffort?.effortList() ?: emptyList()) { effort ->
                     EffortListItem(effort) {
                         navController.navigateToEffortEdit(effort.id)
                     }

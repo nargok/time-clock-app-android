@@ -32,8 +32,6 @@ class EffortListViewModel @Inject constructor(
     var uiState by mutableStateOf(EffortListUiState())
         private set
 
-    private val _efforts = mutableStateOf<List<EffortModel>>(emptyList())
-    val efforts: State<List<EffortModel>> = _efforts
     private val _monthlyEfforts = mutableStateOf<MonthlyEffortModel?>(null)
     val monthlyEfforts: State<MonthlyEffortModel?> = _monthlyEfforts
     private val _standardWorkingHour = mutableStateOf(0)
@@ -58,7 +56,6 @@ class EffortListViewModel @Inject constructor(
             val condition =
                 EffortSearchCondition(uiState.selectedYearMonth)
             val efforts = repository.search(condition)
-            _efforts.value = efforts
 
             val standardWorkingHour = standardWorkingHourRepository.findByYearMonth(uiState.selectedYearMonth)
             _standardWorkingHour.value = standardWorkingHour?.hour?.value ?: 0
