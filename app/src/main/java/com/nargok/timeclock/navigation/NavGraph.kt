@@ -18,7 +18,7 @@ import java.time.YearMonth
 @Composable
 fun TimeClockNavGraph(
     navController: NavHostController,
-    startDestination: String = Screen.EffortList.route,
+    startDestination: String = "effortList?success={success}",
 ) {
     NavHost(
         navController = navController,
@@ -26,7 +26,7 @@ fun TimeClockNavGraph(
     ) {
         // 作業時間リスト
         composable(
-            route = Screen.EffortList.route + "?success={success}",
+            route = "effortList?success={success}",
             arguments = listOf(
                 navArgument("success") {
                     type = NavType.BoolType
