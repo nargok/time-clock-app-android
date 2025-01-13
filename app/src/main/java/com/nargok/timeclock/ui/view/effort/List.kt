@@ -99,6 +99,9 @@ fun EffortListScreen(
             FloatingActionButton(onClick = { navController.navigateToEffortRegister() }) {
                 Icon(Icons.Filled.Add, contentDescription = "")
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState)
         }
     ) { paddingValues ->
         Column(
@@ -154,10 +157,7 @@ fun EffortListScreen(
             }
 
         }
-
     }
-
-    SnackbarHost(hostState = snackBarHostState)
 }
 
 @RequiresApi(Build.VERSION_CODES.S)

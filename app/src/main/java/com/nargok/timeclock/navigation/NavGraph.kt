@@ -46,7 +46,7 @@ fun TimeClockNavGraph(
                     navController.popBackStack()
                 },
                 onSaveSuccess = {
-                    navController.navigate(Screen.EffortList.route) {
+                    navController.navigate(Screen.EffortList.createRoute(true)) {
                         popUpTo(navController.graph.startDestinationId) { inclusive = true }
                     }
                 }
@@ -72,8 +72,8 @@ fun TimeClockNavGraph(
                     navController.popBackStack()
                 },
                 onSaveSuccess = {
-                    navController.navigate(Screen.EffortList.route) {
-                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    navController.navigate(Screen.EffortList.createRoute(true)) {
+                        popUpTo(Screen.EffortList.route) { inclusive = true }
                     }
                 }
             )
