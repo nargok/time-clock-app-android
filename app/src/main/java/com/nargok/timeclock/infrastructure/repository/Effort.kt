@@ -46,6 +46,10 @@ class EffortRepositoryImpl @Inject constructor(
             description = model.description?.value,
         )
     }
+
+    override suspend fun delete(id: EffortId) {
+        effortDao.deleteEffort(id.value)
+    }
 }
 
 /**

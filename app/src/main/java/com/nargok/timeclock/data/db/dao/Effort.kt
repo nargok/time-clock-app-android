@@ -28,4 +28,7 @@ interface EffortDao {
         leave: Boolean,
         description: String?
     )
+
+    @Query("DELETE FROM effort WHERE id = :id")
+    suspend fun deleteEffort(id: String)
 }

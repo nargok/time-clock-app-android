@@ -18,4 +18,6 @@ interface EffortRepository {
     suspend fun register(model: EffortModel)
 
     suspend fun update(model: EffortModel)
+
+    suspend fun delete(id: EffortId)
 }
