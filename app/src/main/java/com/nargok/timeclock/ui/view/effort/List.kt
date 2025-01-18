@@ -176,7 +176,7 @@ fun EffortListItem(effort: EffortModel, onClick: () -> Unit) {
     ) {
         Column {
             Text(
-                text = "${effort.date.format(DateTimeFormatter.ofPattern("MM/dd (E)"))}",
+                text = "${effort.date.format(DateTimeFormatter.ofPattern("MM/dd (E)"))} ${if (effort.leave) "休" else ""}",
                 fontSize = 20.sp
             )
             Row(modifier = Modifier.padding(top = 16.dp)) {
@@ -185,5 +185,9 @@ fun EffortListItem(effort: EffortModel, onClick: () -> Unit) {
                 Text(text = "(${effort.workingTime()}H)")
             }
         }
+    }
+
+    fun itemTitle(): String {
+        return "${effort.date.format(DateTimeFormatter.ofPattern("MM/dd (E)"))}"
     }
 }

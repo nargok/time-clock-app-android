@@ -24,6 +24,7 @@ data class EffortUiState(
     val showDatePicker: Boolean = false,
     val showStartTimePicker: Boolean = false,
     val showEndTimePicker: Boolean = false,
+    val leave: Boolean = false,
 )
 
 @HiltViewModel
@@ -41,6 +42,10 @@ class EffortRegisterViewModel @Inject constructor(
 
     fun updateDate(date: LocalDate) {
         uiState = uiState.copy(selectedDate = date)
+    }
+
+    fun toggleLeave() {
+        uiState = uiState.copy(leave = !uiState.leave)
     }
 
     fun updateStartTime(time: LocalTime) {
@@ -73,13 +78,7 @@ class EffortRegisterViewModel @Inject constructor(
 
     fun save() {
         viewModelScope.launch(Dispatchers.IO) {
-            val model = EffortModel.create(
-                date = uiState.selectedDate,
-                startTime = uiState.startTime,
-                endTime = uiState.endTime,
-                leave = false, // TODO add uiState
-                description = EffortDescription(uiState.description),
-            )
+            val model = buildEffortModel()
             try {
                 effortService.register(model)
                 _saveSuccess.value = true
@@ -87,5 +86,27 @@ class EffortRegisterViewModel @Inject constructor(
                 _failedToRegister.value = true
             }
         }
+    }
+
+    fun leave() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val model = buildEffortModel()
+            try {
+                effortService.register(model.leave())
+                _saveSuccess.value = true
+            } catch (e: Exception) {
+                _failedToRegister.value = true
+            }
+        }
+    }
+
+    private fun buildEffortModel(): EffortModel {
+        return EffortModel.create(
+            date = uiState.selectedDate,
+            startTime = uiState.startTime,
+            endTime = uiState.endTime,
+            leave = false,
+            description = EffortDescription(uiState.description),
+        )
     }
 }

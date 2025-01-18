@@ -17,6 +17,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -80,7 +81,7 @@ fun EffortRegisterScreen(
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Center
         ) {
             // 日付
             OutlinedTextField(
@@ -207,8 +208,18 @@ fun EffortRegisterScreen(
             ) {
                 Text("保存")
             }
-        }
 
+            // 残りのスペースを確保
+            Spacer(modifier = Modifier.weight(1f))
+
+            OutlinedButton(
+                onClick = { viewModel.leave() },
+                modifier = Modifier
+                    .padding(32.dp)
+            ) {
+                Text("休暇にする")
+            }
+        }
         SnackbarHost(hostState = snackBarHostState)
     }
 }
