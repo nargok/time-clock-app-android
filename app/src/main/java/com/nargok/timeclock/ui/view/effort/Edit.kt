@@ -86,6 +86,7 @@ fun EffortEditScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     val saveSuccess by viewModel.saveSuccess
     val failedToUpdate by viewModel.failedToUpdate
+    val failedToDelete by viewModel.failedToDelete
 
     LaunchedEffect(Unit) {
         viewModel.fetchEffort(id)
@@ -107,11 +108,21 @@ fun EffortEditScreen(
         }
     }
 
+    LaunchedEffect(failedToDelete) {
+        if (failedToDelete) {
+            snackBarHostState.showSnackbar(
+                message = "削除に失敗しました",
+                duration = SnackbarDuration.Short
+            )
+            viewModel.closeFailedToDelete()
+        }
+    }
+
     Scaffold(
         topBar =  {
             HeaderWithDeleteButton(
                 title = "作業記録編集",
-                onDelete = {},
+                onDelete = { viewModel.delete(id) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -249,7 +260,7 @@ fun EffortEditScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    onClick = { viewModel.save(requireNotNull(uiState.id)) },
+                    onClick = { viewModel.save(id) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("保存")

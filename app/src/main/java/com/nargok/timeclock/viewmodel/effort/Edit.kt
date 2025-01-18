@@ -40,6 +40,8 @@ class EffortEditViewModel @Inject constructor(
     val saveSuccess: State<Boolean> = _saveSuccess
     private val _failedToUpdate = mutableStateOf(false)
     val failedToUpdate: State<Boolean> = _failedToUpdate
+    private val _failedToDelete = mutableStateOf(false)
+    val failedToDelete: State<Boolean> = _failedToDelete
 
     fun updateDate(date: LocalDate) {
         uiState = uiState.copy(selectedDate = date)
@@ -88,6 +90,10 @@ class EffortEditViewModel @Inject constructor(
         _failedToUpdate.value = false
     }
 
+    fun closeFailedToDelete() {
+        _failedToDelete.value = false
+    }
+
     fun save(id: EffortId) {
         viewModelScope.launch(Dispatchers.IO) {
             val model = EffortModel.reconstruct(
@@ -104,6 +110,18 @@ class EffortEditViewModel @Inject constructor(
             } catch (e: Exception) {
                 _failedToUpdate.value = true
                 println("EditEffortViewModel.save: $e")
+            }
+        }
+    }
+
+    fun delete(id: EffortId) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.delete(id)
+                _saveSuccess.value = true
+            } catch (e: Exception) {
+                _failedToDelete.value = true
+                println("EditEffortViewModel.delete: $e")
             }
         }
     }
