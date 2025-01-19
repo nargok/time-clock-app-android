@@ -269,7 +269,5 @@ fun EffortEditScreen(
 
             SnackbarHost(hostState = snackBarHostState)
         }
-
     }
-
 }
