@@ -96,14 +96,7 @@ class EffortEditViewModel @Inject constructor(
 
     fun save(id: EffortId) {
         viewModelScope.launch(Dispatchers.IO) {
-            val model = EffortModel.reconstruct(
-                id = id,
-                date = requireNotNull(uiState.selectedDate),
-                startTime = requireNotNull(uiState.startTime),
-                endTime = requireNotNull(uiState.endTime),
-                leave = false, // TODO set it from uiState
-                description = EffortDescription(uiState.description),
-            )
+            val model = buildEffortModel(id)
             try {
                 repository.update(model)
                 _saveSuccess.value = true
@@ -124,5 +117,29 @@ class EffortEditViewModel @Inject constructor(
                 println("EditEffortViewModel.delete: $e")
             }
         }
+    }
+
+    fun leave(id: EffortId) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val model = buildEffortModel(id)
+            try {
+                repository.update(model.leave())
+                _saveSuccess.value = true
+            } catch (e: Exception) {
+                _failedToUpdate.value = true
+                println("EditEffortViewModel.leave: $e")
+            }
+        }
+    }
+
+    private fun buildEffortModel(id: EffortId): EffortModel {
+        return EffortModel.reconstruct(
+            id = id,
+            date = requireNotNull(uiState.selectedDate),
+            startTime = requireNotNull(uiState.startTime),
+            endTime = requireNotNull(uiState.endTime),
+            leave = false,
+            description = EffortDescription(uiState.description),
+        )
     }
 }

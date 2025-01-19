@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -119,9 +120,9 @@ fun EffortEditScreen(
     }
 
     Scaffold(
-        topBar =  {
+        topBar = {
             HeaderWithDeleteButton(
-                title = "作業記録編集",
+                title = "勤務時間編集",
                 onDelete = { viewModel.delete(id) },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -265,11 +266,19 @@ fun EffortEditScreen(
                 ) {
                     Text("保存")
                 }
-            }
 
+                // 残りのスペースを確保
+                Spacer(modifier = Modifier.weight(1f))
+
+                OutlinedButton(
+                    onClick = { viewModel.leave(id) },
+                    modifier = Modifier
+                        .padding(32.dp)
+                ) {
+                    Text("休暇にする")
+                }
+            }
             SnackbarHost(hostState = snackBarHostState)
         }
-
     }
-
 }

@@ -2,7 +2,6 @@ package com.nargok.timeclock.domain.model
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.nargok.timeclock.config.defaultWorkingHours
 import com.nargok.timeclock.domain.model.vo.StandardWorkingHour
 import com.nargok.timeclock.domain.model.vo.EffortDescription
 import com.nargok.timeclock.domain.model.vo.EffortId
@@ -31,7 +30,7 @@ data class EffortModel private constructor(
             id = id,
             date = date,
             startTime = LocalTime.of(9, 0),
-            endTime = startTime.plusHours(defaultWorkingHours),
+            endTime = startTime.plusHours(WORKING_HOURS_PER_DAY.toLong() + FIXED_BREAK_TIME.toLong()),
             leave = true,
         )
     }
@@ -54,6 +53,7 @@ data class EffortModel private constructor(
 
     companion object {
         const val FIXED_BREAK_TIME = 1.0
+        const val WORKING_HOURS_PER_DAY = 8.0
 
         fun create(date: LocalDate, startTime: LocalTime, endTime: LocalTime, leave: Boolean, description: EffortDescription?): EffortModel {
             return EffortModel(
@@ -124,7 +124,7 @@ data class MonthlyEffortModel(
      * 作業日数
      */
     fun totalDays(): Int {
-        return standardWorkingHour.value / WORKING_HOURS_PER_DAY
+        return standardWorkingHour.value / EffortModel.WORKING_HOURS_PER_DAY.toInt()
     }
 
     /**
@@ -155,9 +155,5 @@ data class MonthlyEffortModel(
     fun averageWorkingHours(): Double {
         if (efforts.isEmpty()) return 0.0
         return String.format("%.2f", totalWorkingHours() / efforts.size).toDouble()
-    }
-
-    companion object {
-        private const val WORKING_HOURS_PER_DAY = 8
     }
 }
