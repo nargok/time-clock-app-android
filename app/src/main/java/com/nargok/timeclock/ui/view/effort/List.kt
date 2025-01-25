@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -179,8 +180,7 @@ fun EffortListScreen(
                     )
                 }
         ) {
-            Column {
-                // FIXME 最初から全項目表示してもよいかも
+            Column(modifier = Modifier.padding(bottom = 8.dp)) {
                 if (uiState.displayEffortSummary) {
                     Text(
                         "基準時間: ${viewModel.standardWorkingHour.value}時間(${monthlyEffort?.totalDays()}日)",
@@ -209,10 +209,10 @@ fun EffortListScreen(
                 }
             }
             LazyColumn(
-                contentPadding = paddingValues,
+                contentPadding = PaddingValues(0.dp),
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(horizontal = 16.dp),
             ) {
                 items(monthlyEffort?.effortList() ?: emptyList()) { effort ->
                     EffortListItem(effort) {
