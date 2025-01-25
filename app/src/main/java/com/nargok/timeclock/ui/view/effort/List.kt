@@ -19,8 +19,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -110,24 +113,26 @@ fun EffortListScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.clickable {  }
                     ) {
-                        IconButton(onClick = { viewModel.setPreviousYearMonth() }) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "Previous Month")
-                        }
-                        Text("作業記録 ${uiState.selectedYearMonth.year}/${uiState.selectedYearMonth.monthValue}")
-                        IconButton(onClick = { viewModel.setNextYearMonth() }) {
-                            Icon(Icons.Default.ArrowForward, contentDescription = "Next  Month")
-                        }
-                        IconButton(onClick = {
-                            navController.navigateToStandardWorkingHourEdit(uiState.selectedYearMonth)
-                        }) {
-                            Icon(
-                                Icons.Default.Edit,
-                                contentDescription = "Go to Standard working hours"
-                            )
-                        }
+                        Text("${uiState.selectedYearMonth.year}/${uiState.selectedYearMonth.monthValue}(Avg: ${monthlyEffort?.averageWorkingHours()}H)")
+                        Icon(
+//                            Icons.Default.ArrowDropUp,
+                            Icons.Default.ArrowDropDown,
+                            contentDescription = "Display monthly effort summary"
+                        )
                     }
                 },
+                actions = {
+                    IconButton(onClick = {
+                        navController.navigateToStandardWorkingHourEdit(uiState.selectedYearMonth)
+                    }) {
+                        Icon(
+                            Icons.Default.Settings,
+                            contentDescription = "Go to Standard working hours"
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -154,8 +159,8 @@ fun EffortListScreen(
                                     viewModel.setNextYearMonth()
                                     isAnimating = true
                                 }
-                                offsetX > swipeThreshold ->
-                                {
+
+                                offsetX > swipeThreshold -> {
                                     swipeDirection = 1f
                                     viewModel.setPreviousYearMonth()
                                     isAnimating = true
