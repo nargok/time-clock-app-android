@@ -3,6 +3,7 @@ package com.nargok.timeclock.ui.view.effort
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,9 +30,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,6 +60,9 @@ fun EffortListScreen(
     val uiState = viewModel.uiState
     val monthlyEffort by viewModel.monthlyEfforts
     val snackBarHostState = remember { SnackbarHostState() }
+
+    var offsetX by remember { mutableFloatStateOf(0f) }
+    val swipeThreshold = 100f
 
     LaunchedEffect(Unit) {
         viewModel.fetchMonthlyEfforts()
@@ -113,6 +121,21 @@ fun EffortListScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures(
+                        onDragEnd = {
+                            when {
+                                offsetX < -swipeThreshold -> viewModel.setNextYearMonth()
+                                offsetX > swipeThreshold -> viewModel.setPreviousYearMonth()
+                            }
+                            offsetX = 0f
+                        },
+                        onDragCancel = { offsetX = 0f },
+                        onHorizontalDrag = { _, dragAmount ->
+                            offsetX += dragAmount
+                        }
+                    )
+                }
         ) {
             Column {
                 // FIXME 最初から全項目表示してもよいかも
