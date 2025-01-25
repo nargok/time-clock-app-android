@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -71,13 +72,18 @@ fun EffortListScreen(
 
     var offsetX by remember { mutableFloatStateOf(0f) }
     val swipeThreshold = 100f
-    val coroutineScope = rememberCoroutineScope()
-    val animatedOffset by animateFloatAsState(
-        targetValue = offsetX,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        )
+    var isAnimating by remember { mutableStateOf(false) }
+    var swipeDirection by remember { mutableFloatStateOf(0f) }
+
+    val offsetAnimation by animateFloatAsState(
+        targetValue = if (isAnimating) swipeDirection * 1000f else 0f,
+        animationSpec = tween(300),
+        finishedListener = {
+            if (isAnimating) {
+                offsetX = 0f
+                isAnimating = false
+            }
+        }
     )
 
     LaunchedEffect(Unit) {
@@ -137,35 +143,31 @@ fun EffortListScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .offset { IntOffset(animatedOffset.roundToInt(), 0) }
+                .offset { IntOffset(offsetAnimation.roundToInt(), 0) }
                 .pointerInput(Unit) {
+                    // 横スワイプで前月・翌月に遷移
                     detectHorizontalDragGestures(
                         onDragEnd = {
                             when {
                                 offsetX < -swipeThreshold -> {
+                                    swipeDirection = -1f
                                     viewModel.setNextYearMonth()
-                                    offsetX = -size.width.toFloat()
+                                    isAnimating = true
                                 }
                                 offsetX > swipeThreshold ->
                                 {
+                                    swipeDirection = 1f
                                     viewModel.setPreviousYearMonth()
-                                    offsetX = size.width.toFloat()
-                                }
-                                else -> {
-                                    offsetX = 0f
+                                    isAnimating = true
                                 }
                             }
-                            coroutineScope.launch {
-                                kotlinx.coroutines.delay(300)
-                                offsetX = 0f
-                            }
+                            offsetX = 0f
                         },
                         onDragCancel = { offsetX = 0f },
                         onHorizontalDrag = { _, dragAmount ->
-                            offsetX = (offsetX + dragAmount).coerceIn(
-                                -size.width.toFloat(),
-                                size.width.toFloat()
-                            )
+                            if (!isAnimating) {
+                                offsetX += dragAmount
+                            }
                         }
                     )
                 }
