@@ -2,12 +2,16 @@ package com.nargok.timeclock.ui.view.effort
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -33,10 +37,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,7 +53,9 @@ import com.nargok.timeclock.viewmodel.effort.EffortListViewModel
 import com.nargok.timeclock.navigation.navigateToEffortEdit
 import com.nargok.timeclock.navigation.navigateToEffortRegister
 import com.nargok.timeclock.navigation.navigateToStandardWorkingHourEdit
+import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 @RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,6 +71,14 @@ fun EffortListScreen(
 
     var offsetX by remember { mutableFloatStateOf(0f) }
     val swipeThreshold = 100f
+    val coroutineScope = rememberCoroutineScope()
+    val animatedOffset by animateFloatAsState(
+        targetValue = offsetX,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
 
     LaunchedEffect(Unit) {
         viewModel.fetchMonthlyEfforts()
@@ -121,18 +137,35 @@ fun EffortListScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .offset { IntOffset(animatedOffset.roundToInt(), 0) }
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures(
                         onDragEnd = {
                             when {
-                                offsetX < -swipeThreshold -> viewModel.setNextYearMonth()
-                                offsetX > swipeThreshold -> viewModel.setPreviousYearMonth()
+                                offsetX < -swipeThreshold -> {
+                                    viewModel.setNextYearMonth()
+                                    offsetX = -size.width.toFloat()
+                                }
+                                offsetX > swipeThreshold ->
+                                {
+                                    viewModel.setPreviousYearMonth()
+                                    offsetX = size.width.toFloat()
+                                }
+                                else -> {
+                                    offsetX = 0f
+                                }
                             }
-                            offsetX = 0f
+                            coroutineScope.launch {
+                                kotlinx.coroutines.delay(300)
+                                offsetX = 0f
+                            }
                         },
                         onDragCancel = { offsetX = 0f },
                         onHorizontalDrag = { _, dragAmount ->
-                            offsetX += dragAmount
+                            offsetX = (offsetX + dragAmount).coerceIn(
+                                -size.width.toFloat(),
+                                size.width.toFloat()
+                            )
                         }
                     )
                 }
