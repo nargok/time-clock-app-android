@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nargok.timeclock.domain.model.EffortModel
 import com.nargok.timeclock.domain.model.EffortSearchCondition
 import com.nargok.timeclock.domain.model.MonthlyEffortModel
 import com.nargok.timeclock.domain.model.vo.StandardWorkingHour
