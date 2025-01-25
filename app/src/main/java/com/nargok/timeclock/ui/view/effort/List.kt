@@ -2,9 +2,7 @@ package com.nargok.timeclock.ui.view.effort
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -18,11 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,7 +36,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,7 +51,6 @@ import com.nargok.timeclock.viewmodel.effort.EffortListViewModel
 import com.nargok.timeclock.navigation.navigateToEffortEdit
 import com.nargok.timeclock.navigation.navigateToEffortRegister
 import com.nargok.timeclock.navigation.navigateToStandardWorkingHourEdit
-import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
@@ -113,14 +106,23 @@ fun EffortListScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.clickable {  }
+                        modifier = Modifier.clickable {
+                            viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary)
+                        }
                     ) {
                         Text("${uiState.selectedYearMonth.year}/${uiState.selectedYearMonth.monthValue}(Avg: ${monthlyEffort?.averageWorkingHours()}H)")
-                        Icon(
-//                            Icons.Default.ArrowDropUp,
-                            Icons.Default.ArrowDropDown,
-                            contentDescription = "Display monthly effort summary"
-                        )
+                        if (uiState.displayEffortSummary) {
+                            Icon(
+                                Icons.Default.ArrowDropUp,
+                                contentDescription = "Display monthly effort summary"
+                            )
+
+                        } else {
+                            Icon(
+                                Icons.Default.ArrowDropDown,
+                                contentDescription = "Display monthly effort summary"
+                            )
+                        }
                     }
                 },
                 actions = {
@@ -183,32 +185,28 @@ fun EffortListScreen(
                     Text(
                         "基準時間: ${viewModel.standardWorkingHour.value}時間(${monthlyEffort?.totalDays()}日)",
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
+                            .padding(horizontal = 16.dp),
                         fontSize = 24.sp
                     )
                     Text(
                         "合計時間: ${monthlyEffort?.totalWorkingHours()}時間(${monthlyEffort?.workedDays()}日)",
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
+                            .padding(horizontal = 16.dp),
                         fontSize = 24.sp
                     )
                     Text(
                         "残り日数: ${monthlyEffort?.remainingDays()}日",
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
+                            .padding(horizontal = 16.dp),
+                        fontSize = 24.sp
+                    )
+                    Text(
+                        "平均: ${monthlyEffort?.averageWorkingHours()}H",
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp),
                         fontSize = 24.sp
                     )
                 }
-                Text(
-                    "平均: ${monthlyEffort?.averageWorkingHours()}H",
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .clickable { viewModel.toggleDisplayEffortSummary(!uiState.displayEffortSummary) },
-                    fontSize = 24.sp
-                )
             }
             LazyColumn(
                 contentPadding = paddingValues,
