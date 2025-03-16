@@ -135,6 +135,14 @@ data class MonthlyEffortModel(
     }
 
     /**
+     * 残りの作業時間
+     */
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun remainingTime(): Double {
+        return standardWorkingHour.value - totalWorkingHours()
+    }
+
+    /**
      * 残りの作業日数
      */
     fun remainingDays(): Int {
