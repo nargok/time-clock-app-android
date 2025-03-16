@@ -9,6 +9,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.YearMonth
+import java.util.Locale
 
 /**
  * 作業記録
@@ -41,7 +42,11 @@ data class EffortModel private constructor(
     @RequiresApi(Build.VERSION_CODES.S)
     fun workingTime(): String {
         val duration = workingTimeDuration()
-        return String.format("%.2f", duration.toHours().toDouble() + (duration.toMinutesPart() * 0.01) - FIXED_BREAK_TIME)
+        return String.format(
+            Locale.US,
+            "%.2f",
+            duration.toHours().toDouble() + (duration.toMinutesPart() * 0.01) - FIXED_BREAK_TIME
+        )
     }
 
     /**
@@ -55,7 +60,13 @@ data class EffortModel private constructor(
         const val FIXED_BREAK_TIME = 1.0
         const val WORKING_HOURS_PER_DAY = 8.0
 
-        fun create(date: LocalDate, startTime: LocalTime, endTime: LocalTime, leave: Boolean, description: EffortDescription?): EffortModel {
+        fun create(
+            date: LocalDate,
+            startTime: LocalTime,
+            endTime: LocalTime,
+            leave: Boolean,
+            description: EffortDescription?
+        ): EffortModel {
             return EffortModel(
                 id = EffortId.create(),
                 date = date,
@@ -117,7 +128,10 @@ data class MonthlyEffortModel(
         val totalMinutes = efforts.sumOf { it.workingTimeDuration().toMinutesPart() }
         val totalMinutesToHours = (totalMinutes / 60)
         val remainingMinutes = (totalMinutes % 60) * 0.01
-        return totalHours + totalMinutesToHours + remainingMinutes - efforts.size * EffortModel.FIXED_BREAK_TIME
+        val total =
+            totalHours + totalMinutesToHours + remainingMinutes - efforts.size * EffortModel.FIXED_BREAK_TIME
+
+        return String.format(Locale.US, "%.2f", total).toDouble()
     }
 
     /**
@@ -162,6 +176,6 @@ data class MonthlyEffortModel(
     @RequiresApi(Build.VERSION_CODES.S)
     fun averageWorkingHours(): Double {
         if (efforts.isEmpty()) return 0.0
-        return String.format("%.2f", totalWorkingHours() / efforts.size).toDouble()
+        return String.format(Locale.US, "%.2f", totalWorkingHours() / efforts.size).toDouble()
     }
 }
