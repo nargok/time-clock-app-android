@@ -195,6 +195,12 @@ fun EffortListScreen(
                         fontSize = 24.sp
                     )
                     Text(
+                        "残り時間: ${monthlyEffort?.remainingTime()}時間",
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp),
+                        fontSize = 24.sp
+                    )
+                    Text(
                         "残り日数: ${monthlyEffort?.remainingDays()}日",
                         modifier = Modifier
                             .padding(horizontal = 16.dp),
