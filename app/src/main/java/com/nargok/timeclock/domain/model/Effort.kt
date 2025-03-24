@@ -40,13 +40,10 @@ data class EffortModel private constructor(
      * 作業時間
      */
     @RequiresApi(Build.VERSION_CODES.S)
-    fun workingTime(): String {
+    fun workingTime(): Double {
         val duration = workingTimeDuration()
-        return String.format(
-            Locale.US,
-            "%.2f",
-            duration.toHours().toDouble() + (duration.toMinutesPart() * 0.01) - FIXED_BREAK_TIME
-        )
+        val total = duration.toHours().toDouble() + (duration.toMinutesPart() * 0.01) - FIXED_BREAK_TIME
+        return total.formatToTwoDecimalPlaces()
     }
 
     /**
@@ -131,7 +128,7 @@ data class MonthlyEffortModel(
         val total =
             totalHours + totalMinutesToHours + remainingMinutes - efforts.size * EffortModel.FIXED_BREAK_TIME
 
-        return String.format(Locale.US, "%.2f", total).toDouble()
+        return total.formatToTwoDecimalPlaces()
     }
 
     /**
@@ -153,7 +150,8 @@ data class MonthlyEffortModel(
      */
     @RequiresApi(Build.VERSION_CODES.S)
     fun remainingTime(): Double {
-        return standardWorkingHour.value - totalWorkingHours()
+        val total = standardWorkingHour.value - totalWorkingHours()
+        return total.formatToTwoDecimalPlaces()
     }
 
     /**
@@ -176,6 +174,11 @@ data class MonthlyEffortModel(
     @RequiresApi(Build.VERSION_CODES.S)
     fun averageWorkingHours(): Double {
         if (efforts.isEmpty()) return 0.0
-        return String.format(Locale.US, "%.2f", totalWorkingHours() / efforts.size).toDouble()
+        return (totalWorkingHours() / efforts.size).formatToTwoDecimalPlaces()
     }
 }
+
+/**
+ * 作業記録の作業時間を小数点第二位まで表示する
+ */
+private fun Double.formatToTwoDecimalPlaces(): Double = String.format(Locale.US, "%.2f", this).toDouble()
