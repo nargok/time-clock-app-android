@@ -3,20 +3,20 @@ package com.nargok.timeclock.ui.view.effort
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
@@ -102,8 +103,7 @@ fun EffortRegisterScreen(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-    ) {
-        paddingValues ->
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -118,20 +118,24 @@ fun EffortRegisterScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 // 日付
-                OutlinedTextField(
-                    value = uiState.selectedDate?.format(DateTimeFormatter.ISO_DATE) ?: "",
-                    onValueChange = {},
-                    label = { Text("日付") },
-                    modifier = Modifier.fillMaxWidth(),
-                    readOnly = true,
-                    trailingIcon = {
-                        IconButton(onClick = {
-                            viewModel.toggleDatePicker(true)
-                        }) {
-                            Icon(Icons.Filled.CalendarToday, contentDescription = "日付選択")
-                        }
+                Surface(onClick = {
+                    viewModel.toggleDatePicker(true)
+                }) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Filled.CalendarToday, contentDescription = "日付選択")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = uiState.selectedDate.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日"))
+                                ?: "",
+                            modifier = Modifier.weight(1f)
+                        )
                     }
-                )
+                }
 
                 if (uiState.showDatePicker) {
                     DatePickerDialog(
@@ -159,20 +163,23 @@ fun EffortRegisterScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // 開始時間
-                OutlinedTextField(
-                    value = uiState.startTime.format(DateTimeFormatter.ofPattern("HH:mm")),
-                    onValueChange = {},
-                    label = { Text("開始") },
-                    modifier = Modifier.fillMaxWidth(),
-                    readOnly = true,
-                    trailingIcon = {
-                        IconButton(onClick = {
-                            viewModel.toggleStartTimePicker(true)
-                        }) {
-                            Icon(Icons.Filled.Schedule, contentDescription = "開始時間選択")
-                        }
+                Surface(onClick = {
+                    viewModel.toggleStartTimePicker(true)
+                }) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("開始")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = uiState.startTime.format(DateTimeFormatter.ofPattern("HH:mm")),
+                            modifier = Modifier.weight(1f)
+                        )
                     }
-                )
+                }
 
                 if (uiState.showStartTimePicker) {
                     EffortTimeDialog(
@@ -189,23 +196,26 @@ fun EffortRegisterScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 // 終了時間
-                OutlinedTextField(
-                    value = uiState.endTime.format(DateTimeFormatter.ofPattern("HH:mm")),
-                    onValueChange = {},
-                    label = { Text("終了") },
-                    modifier = Modifier.fillMaxWidth(),
-                    readOnly = true,
-                    trailingIcon = {
-                        IconButton(onClick = {
-                            viewModel.toggleEndTimePicker(true)
-                        }) {
-                            Icon(Icons.Filled.Schedule, contentDescription = "終了時間選択")
-                        }
+                Surface(onClick = {
+                    viewModel.toggleEndTimePicker(true)
+                }) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("終了")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = uiState.endTime.format(DateTimeFormatter.ofPattern("HH:mm")),
+                            modifier = Modifier.weight(1f)
+                        )
                     }
-                )
+                }
 
                 if (uiState.showEndTimePicker) {
                     EffortTimeDialog(
